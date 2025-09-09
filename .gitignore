@@ -1,0 +1,49 @@
+# Build directories
+build/
+*/build/
+Build/
+*/Build/
+
+# Qt specific
+*.pro.user
+*.pro.user.*
+*.autosave
+
+# Compiled object files
+*.o
+*.obj
+*.patch
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Executables
+Shelfr  # Il tuo eseguibile
+*.exe
+*.app
+
+# Qt generated files
+moc_*
+qrc_*
+ui_*
+
+# Makefile
+Makefile
+*/Makefile
+
+# Debug files
+*.debug
+*.pdb
+
+# Release files
+*.release
+
+# QMake files
+*.qmake.stash
+.cache/
