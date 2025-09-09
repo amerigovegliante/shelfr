@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "sidebar.h"
+#include "workspace.h"
 
 class MainWindow : public QMainWindow
 {
@@ -19,8 +20,8 @@ class MainWindow : public QMainWindow
         void onSearchCollectionClicked();
     
     private:
-        Sidebar *sidebar;
-
+        Sidebar* sidebar;
+        Workspace* workspace;
 };
 
 #endif // MAINWINDOW

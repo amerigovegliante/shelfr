@@ -16,6 +16,9 @@ class Media
         Media(const QString&, const QString&, const QString&, const QString&, int);
         virtual ~Media();
 
+        Media(const Media&);
+        virtual Media* clone() = 0;
+
         QString getTitle() const;
         QString getDescription() const;
         QString getGenre() const;

@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>resources/images/default.jpg</file>
-        <file>styles/style.css</file>
+        <file>styles/dark.css</file>
+        <file>styles/light.css</file>
     </qresource>
 </RCC>

@@ -1,23 +1,16 @@
 #include <QApplication>
 #include <QFile>
+#include <QTextStream>
 #include <QDebug>
 #include "headers/gui/mainwindow.h"
+#include "headers/gui/thememanager.h"
 
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    
-    // Carica il CSS
-    QFile styleFile(":/styles/style.css");
-    if (styleFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        QString styleSheet = QLatin1String(styleFile.readAll());
-        app.setStyleSheet(styleSheet);
-        qDebug() << "CSS loaded successfully";
-        styleFile.close();
-    } else {
-        qDebug() << "Failed to load CSS file";
-    }
-    
+
+    ThemeManager::instance().setTheme(ThemeManager::Dark);  // Puoi anche usare ThemeManager::Light
+
     MainWindow mainWindow;
     mainWindow.show();
     

@@ -1,0 +1,71 @@
+QMainWindow {
+    background-color: #15B392;
+}
+
+QFrame#title
+{
+    color: #7a0062;
+    font: bold;
+    font-size: 48px;
+  	text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;
+}
+
+QFrame {
+    border-radius: 10px;
+}
+
+QWidget {
+    color: #7a0062;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+QFrame#sidebar {
+    background-color: #54C392;
+    margin: 10px;
+    margin-right: 5px !important;
+    border: 2px solid black;
+}
+
+QFrame#workspace {
+    background-color: #73EC8B;
+    margin: 10px;
+    margin-left: 5px !important;
+    border: 2px solid black;
+}
+
+QFrame#theme-label {
+    font-size: 24px;
+}
+
+QPushButton {
+    background-color: #73EC8B;
+    color: #7a0062;
+}
+
+QPushButton:hover {
+    background-color: #85FF9D;
+}
+
+QLabel {
+    color: #7a0062;
+}
+QCheckBox {
+    indicator: none;
+    spacing: 10px;
+}
+
+QCheckBox::indicator {
+    width: 25px;
+    height: 25px;
+    border-radius: 13px;
+}
+
+QCheckBox::indicator:unchecked {
+    background: lightgray;
+    border: 1px solid black;
+}
+
+QCheckBox::indicator:checked {
+    background: lightyellow;
+    border: 1px solid black;
+}

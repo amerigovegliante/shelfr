@@ -13,6 +13,7 @@ class Workspace: public QFrame
         explicit Workspace(QWidget* parent = nullptr);
         virtual ~Workspace() override = default;
 
+        void showDefaultView();
         void showAddItemView();
         void showSearchItemView();
         void showAddCollectionView();
@@ -22,6 +23,7 @@ class Workspace: public QFrame
         QStackedWidget* stackedWidget;
         QVBoxLayout* layout;
 
+        QWidget* defaultView;
         QWidget* addItemView;
         QWidget* searchItemView;
         QWidget* addCollectionView;

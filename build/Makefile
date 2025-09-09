@@ -60,12 +60,15 @@ SOURCES       = ../main.cpp \
 		../src/core/mediavisitorinterface.cpp \
 		../src/core/music.cpp \
 		../src/core/videogame.cpp \
+		../src/core/collection.cpp \
 		../src/gui/mainwindow.cpp \
 		../src/gui/sidebar.cpp \
-		../src/gui/workspace.cpp qrc_resources.cpp \
+		../src/gui/workspace.cpp \
+		../src/gui/thememanager.cpp qrc_resources.cpp \
 		moc_mainwindow.cpp \
 		moc_sidebar.cpp \
-		moc_workspace.cpp
+		moc_workspace.cpp \
+		moc_thememanager.cpp
 OBJECTS       = main.o \
 		book.o \
 		film.o \
@@ -74,13 +77,16 @@ OBJECTS       = main.o \
 		mediavisitorinterface.o \
 		music.o \
 		videogame.o \
+		collection.o \
 		mainwindow.o \
 		sidebar.o \
 		workspace.o \
+		thememanager.o \
 		qrc_resources.o \
 		moc_mainwindow.o \
 		moc_sidebar.o \
-		moc_workspace.o
+		moc_workspace.o \
+		moc_thememanager.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt6/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt6/mkspecs/common/linux.conf \
@@ -157,9 +163,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/spec_pre.prf \
 		../headers/core/mediavisitorinterface.h \
 		../headers/core/music.h \
 		../headers/core/videogame.h \
+		../headers/core/collection.h \
 		../headers/gui/mainwindow.h \
 		../headers/gui/sidebar.h \
-		../headers/gui/workspace.h ../main.cpp \
+		../headers/gui/workspace.h \
+		../headers/gui/thememanager.h ../main.cpp \
 		../src/core/book.cpp \
 		../src/core/film.cpp \
 		../src/core/media.cpp \
@@ -167,9 +175,11 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/spec_pre.prf \
 		../src/core/mediavisitorinterface.cpp \
 		../src/core/music.cpp \
 		../src/core/videogame.cpp \
+		../src/core/collection.cpp \
 		../src/gui/mainwindow.cpp \
 		../src/gui/sidebar.cpp \
-		../src/gui/workspace.cpp
+		../src/gui/workspace.cpp \
+		../src/gui/thememanager.cpp
 QMAKE_TARGET  = Shelfr
 DESTDIR       = 
 TARGET        = Shelfr
@@ -346,8 +356,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../headers/core/book.h ../headers/core/film.h ../headers/core/media.h ../headers/core/mediaobserverinterface.h ../headers/core/mediavisitorinterface.h ../headers/core/music.h ../headers/core/videogame.h ../headers/gui/mainwindow.h ../headers/gui/sidebar.h ../headers/gui/workspace.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../main.cpp ../src/core/book.cpp ../src/core/film.cpp ../src/core/media.cpp ../src/core/mediaobserverinterface.cpp ../src/core/mediavisitorinterface.cpp ../src/core/music.cpp ../src/core/videogame.cpp ../src/gui/mainwindow.cpp ../src/gui/sidebar.cpp ../src/gui/workspace.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../headers/core/book.h ../headers/core/film.h ../headers/core/media.h ../headers/core/mediaobserverinterface.h ../headers/core/mediavisitorinterface.h ../headers/core/music.h ../headers/core/videogame.h ../headers/core/collection.h ../headers/gui/mainwindow.h ../headers/gui/sidebar.h ../headers/gui/workspace.h ../headers/gui/thememanager.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../main.cpp ../src/core/book.cpp ../src/core/film.cpp ../src/core/media.cpp ../src/core/mediaobserverinterface.cpp ../src/core/mediavisitorinterface.cpp ../src/core/music.cpp ../src/core/videogame.cpp ../src/core/collection.cpp ../src/gui/mainwindow.cpp ../src/gui/sidebar.cpp ../src/gui/workspace.cpp ../src/gui/thememanager.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -377,7 +387,8 @@ compiler_rcc_clean:
 qrc_resources.cpp: ../resources.qrc \
 		/usr/lib/qt6/libexec/rcc \
 		../resources/images/default.jpg \
-		../styles/style.css
+		../styles/light.css \
+		../styles/dark.css
 	/usr/lib/qt6/libexec/rcc -name resources ../resources.qrc -o qrc_resources.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
@@ -386,16 +397,19 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt6/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_sidebar.cpp moc_workspace.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_sidebar.cpp moc_workspace.cpp moc_thememanager.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_sidebar.cpp moc_workspace.cpp
+	-$(DEL_FILE) moc_mainwindow.cpp moc_sidebar.cpp moc_workspace.cpp moc_thememanager.cpp
 moc_mainwindow.cpp: ../headers/gui/mainwindow.h \
 		../headers/gui/sidebar.h \
+		../headers/gui/thememanager.h \
+		../headers/gui/workspace.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
 	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/shinomi/Projects/shelfr/build/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/shinomi/Projects/shelfr -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/14 -I/usr/include/x86_64-linux-gnu/c++/14 -I/usr/include/c++/14/backward -I/usr/lib/gcc/x86_64-linux-gnu/14/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../headers/gui/mainwindow.h -o moc_mainwindow.cpp
 
 moc_sidebar.cpp: ../headers/gui/sidebar.h \
+		../headers/gui/thememanager.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
 	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/shinomi/Projects/shelfr/build/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/shinomi/Projects/shelfr -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/14 -I/usr/include/x86_64-linux-gnu/c++/14 -I/usr/include/c++/14/backward -I/usr/lib/gcc/x86_64-linux-gnu/14/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../headers/gui/sidebar.h -o moc_sidebar.cpp
@@ -404,6 +418,11 @@ moc_workspace.cpp: ../headers/gui/workspace.h \
 		moc_predefs.h \
 		/usr/lib/qt6/libexec/moc
 	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/shinomi/Projects/shelfr/build/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/shinomi/Projects/shelfr -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/14 -I/usr/include/x86_64-linux-gnu/c++/14 -I/usr/include/c++/14/backward -I/usr/lib/gcc/x86_64-linux-gnu/14/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../headers/gui/workspace.h -o moc_workspace.cpp
+
+moc_thememanager.cpp: ../headers/gui/thememanager.h \
+		moc_predefs.h \
+		/usr/lib/qt6/libexec/moc
+	/usr/lib/qt6/libexec/moc $(DEFINES) --include /home/shinomi/Projects/shelfr/build/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt6/mkspecs/linux-g++ -I/home/shinomi/Projects/shelfr -I/usr/include/x86_64-linux-gnu/qt6 -I/usr/include/x86_64-linux-gnu/qt6/QtWidgets -I/usr/include/x86_64-linux-gnu/qt6/QtGui -I/usr/include/x86_64-linux-gnu/qt6/QtCore -I. -I/usr/include/c++/14 -I/usr/include/x86_64-linux-gnu/c++/14 -I/usr/include/c++/14/backward -I/usr/lib/gcc/x86_64-linux-gnu/14/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../headers/gui/thememanager.h -o moc_thememanager.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
@@ -422,7 +441,9 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ####### Compile
 
 main.o: ../main.cpp ../headers/gui/mainwindow.h \
-		../headers/gui/sidebar.h
+		../headers/gui/sidebar.h \
+		../headers/gui/thememanager.h \
+		../headers/gui/workspace.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 book.o: ../src/core/book.cpp ../headers/core/book.h \
@@ -450,15 +471,25 @@ videogame.o: ../src/core/videogame.cpp ../headers/core/videogame.h \
 		../headers/core/media.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o videogame.o ../src/core/videogame.cpp
 
+collection.o: ../src/core/collection.cpp ../headers/core/collection.h \
+		../headers/core/media.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o collection.o ../src/core/collection.cpp
+
 mainwindow.o: ../src/gui/mainwindow.cpp ../headers/gui/mainwindow.h \
-		../headers/gui/sidebar.h
+		../headers/gui/sidebar.h \
+		../headers/gui/thememanager.h \
+		../headers/gui/workspace.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../src/gui/mainwindow.cpp
 
-sidebar.o: ../src/gui/sidebar.cpp ../headers/gui/sidebar.h
+sidebar.o: ../src/gui/sidebar.cpp ../headers/gui/sidebar.h \
+		../headers/gui/thememanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o sidebar.o ../src/gui/sidebar.cpp
 
 workspace.o: ../src/gui/workspace.cpp ../headers/gui/workspace.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o workspace.o ../src/gui/workspace.cpp
+
+thememanager.o: ../src/gui/thememanager.cpp ../headers/gui/thememanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o thememanager.o ../src/gui/thememanager.cpp
 
 qrc_resources.o: qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
@@ -471,6 +502,9 @@ moc_sidebar.o: moc_sidebar.cpp
 
 moc_workspace.o: moc_workspace.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_workspace.o moc_workspace.cpp
+
+moc_thememanager.o: moc_thememanager.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_thememanager.o moc_thememanager.cpp
 
 ####### Install
 

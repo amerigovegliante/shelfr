@@ -12,9 +12,11 @@ HEADERS += \
     headers/core/mediavisitorinterface.h \
     headers/core/music.h \
     headers/core/videogame.h \
+    headers/core/collection.h\
     headers/gui/mainwindow.h \
     headers/gui/sidebar.h \
-    headers/gui/workspace.h
+    headers/gui/workspace.h \
+    headers/gui/thememanager.h
 
 # Sources
 SOURCES += \
@@ -26,9 +28,11 @@ SOURCES += \
     src/core/mediavisitorinterface.cpp \
     src/core/music.cpp \
     src/core/videogame.cpp \
+    src/core/collection.cpp \
     src/gui/mainwindow.cpp \
     src/gui/sidebar.cpp \
-    src/gui/workspace.cpp
+    src/gui/workspace.cpp \
+    src/gui/thememanager.cpp
 
 # Resources
 RESOURCES += resources.qrc
