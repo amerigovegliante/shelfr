@@ -43,7 +43,6 @@ void ThemeManager::loadTheme(Theme theme)
         QString styleSheet = QString::fromUtf8(file.readAll());
         qApp->setStyleSheet(styleSheet);
         file.close();
-        
         qDebug() << "Theme loaded:" << themeName;
     } else {
         qWarning() << "Cannot load theme:" << themeName << file.errorString();

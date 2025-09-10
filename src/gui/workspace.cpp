@@ -12,17 +12,15 @@ Workspace::Workspace(QWidget* parent) : QFrame(parent)
     
     layout->addWidget(stackedWidget);
 
-    defaultView = new QWidget();
-    addItemView = new QWidget();
+    defaultView = new DefaultView(this);
+    addItemView = new AddItemView(this);
     searchItemView = new QWidget();
     addCollectionView = new QWidget();
     searchCollectionView = new QWidget();
 
     defaultView->setLayout(new QVBoxLayout());
-    defaultView->layout()->addWidget(new QLabel("This is the Default View", defaultView));
 
     addItemView->setLayout(new QVBoxLayout());
-    addItemView->layout()->addWidget(new QLabel("This is the Add Item View", addItemView));
 
     searchItemView->setLayout(new QVBoxLayout());
     searchItemView->layout()->addWidget(new QLabel("This is the Search View", searchItemView));
@@ -40,8 +38,6 @@ Workspace::Workspace(QWidget* parent) : QFrame(parent)
     stackedWidget->addWidget(searchCollectionView);
 
     showDefaultView();
-
-
 }
 
 void Workspace::showDefaultView()

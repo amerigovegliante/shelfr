@@ -1,71 +1,76 @@
 QMainWindow {
-    background-color: #15B392;
-}
-
-QFrame#title
-{
-    color: #7a0062;
-    font: bold;
-    font-size: 48px;
-  	text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000, 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;
-}
-
-QFrame {
-    border-radius: 10px;
-}
-
-QWidget {
-    color: #7a0062;
-    font-family: 'Segoe UI', Arial, sans-serif;
+    background-color: #f5f5f5;
 }
 
 QFrame#sidebar {
-    background-color: #54C392;
     margin: 10px;
-    margin-right: 5px !important;
+    margin-right: 5px !impor;
+    background-color: #e0e0e0;
+    border-right: 1px solid #ccc;
     border: 2px solid black;
+    border-radius: 10px;
 }
 
 QFrame#workspace {
-    background-color: #73EC8B;
     margin: 10px;
-    margin-left: 5px !important;
+    margin-left: 10px !important;
     border: 2px solid black;
+    border-radius: 10px;
 }
 
-QFrame#theme-label {
+QLabel#title {
+    color: #2196F3;
     font-size: 24px;
+    font-weight: bold;
+    padding: 10px;
+    qproperty-alignment: AlignCenter;
+}
+
+QLabel#theme-label {
+    color: #000000;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 QPushButton {
-    background-color: #73EC8B;
-    color: #7a0062;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 4px;
+    text-align: left;
 }
 
 QPushButton:hover {
-    background-color: #85FF9D;
+    background-color: #1976D2;
 }
 
-QLabel {
-    color: #7a0062;
+QPushButton:pressed {
+    background-color: #1565C0;
 }
+
 QCheckBox {
-    indicator: none;
-    spacing: 10px;
+    spacing: 8px;
+    color: #000000;
 }
 
 QCheckBox::indicator {
-    width: 25px;
-    height: 25px;
-    border-radius: 13px;
-}
-
-QCheckBox::indicator:unchecked {
-    background: lightgray;
-    border: 1px solid black;
+    width: 40px;
+    height: 20px;
+    border-radius: 10px;
+    background: #cccccc;
+    border: 1px solid #999999;
 }
 
 QCheckBox::indicator:checked {
-    background: lightyellow;
-    border: 1px solid black;
+    background: #2196F3;
+    border: 1px solid #1976D2;
+}
+
+QCheckBox::indicator:unchecked:hover {
+    background: #bbbbbb;
+}
+
+QCheckBox::indicator:checked:hover {
+    background: #1976D2;
 }

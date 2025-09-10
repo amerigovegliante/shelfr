@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     sidebar = new Sidebar(mainSplitter);
     workspace = new Workspace(mainSplitter);
 
-    sidebar->setMinimumWidth(150);
+    sidebar->setMinimumWidth(200);
     sidebar->setMaximumWidth(300);
     
     workspace->setMinimumWidth(400);

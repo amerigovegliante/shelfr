@@ -1,6 +1,8 @@
 #ifndef WORKSPACE_H
 #define WORKSPACE_H
 
+#include "defaultview.h"
+#include "additemview.h"
 #include <QFrame>
 #include <QStackedWidget>
 #include <QVBoxLayout>
@@ -23,8 +25,8 @@ class Workspace: public QFrame
         QStackedWidget* stackedWidget;
         QVBoxLayout* layout;
 
-        QWidget* defaultView;
-        QWidget* addItemView;
+        DefaultView* defaultView;
+        AddItemView* addItemView;
         QWidget* searchItemView;
         QWidget* addCollectionView;
         QWidget* searchCollectionView;
