@@ -12,13 +12,14 @@ HEADERS += \
     headers/core/mediavisitorinterface.h \
     headers/core/music.h \
     headers/core/videogame.h \
-    headers/core/collection.h\
+    headers/core/collection.h \
+    headers/core/jsonmanager.h \
     headers/gui/mainwindow.h \
     headers/gui/sidebar.h \
     headers/gui/workspace.h \
     headers/gui/thememanager.h \
     headers/gui/defaultview.h \
-    headers/gui/additemview.h
+    headers/gui/additemview.h 
 
 # Sources
 SOURCES += \
@@ -31,6 +32,7 @@ SOURCES += \
     src/core/music.cpp \
     src/core/videogame.cpp \
     src/core/collection.cpp \
+    src/core/jsonmanager.cpp \
     src/gui/mainwindow.cpp \
     src/gui/sidebar.cpp \
     src/gui/workspace.cpp \

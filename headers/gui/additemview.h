@@ -11,6 +11,8 @@
 #include <QString>
 #include <QSpinBox>
 
+#include "../core/jsonmanager.h"
+
 class AddItemView : public QWidget
 {
     Q_OBJECT
@@ -31,19 +33,40 @@ private:
     void setupUI();
     void setupConnections();
     void toggleFields();
+    void saveMediaToJson();
 
     // Form fields
     QComboBox* mediaTypeCombo;
     QTextEdit* descriptionEdit;
     QLineEdit* titleEdit;
-
-    QLabel* yearLabel;
+    QLineEdit* genreEdit;
     QSpinBox* yearEdit;
+
 
     QPushButton* addButton;
     QPushButton* browseImageButton;
     QString currentImagePath;
     
+    QSpinBox* pagesEditBook;
+    QLineEdit* isbnEditBook;
+    QLineEdit* publisherEditBook;
+    QLineEdit* authorEditBook; 
+
+    QSpinBox* durationEditMovie;
+    QSpinBox* ratingEditMovie;
+    QLineEdit* studioEditMovie;
+    QLineEdit* directorEditMovie;
+
+    QLineEdit* formatEditMusic;
+    QLineEdit* labelEditMusic;
+    QSpinBox* durationEditMusic;
+    
+    QLineEdit* platformEditVideogame;
+    QLineEdit* developerEditVideogame;
+    QLineEdit* publisherEditVideogame;
+    QSpinBox* playtimeEditVideogame;
+
+    JsonManager jsonManager;
 };
 
 #endif // ADDITEMVIEW_H

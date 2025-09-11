@@ -59,6 +59,7 @@ QPushButton {
 QPushButton#imagebrowser {
     margin-top: 5px !important;
     background-color: brown;
+    height: 50px;
 }
 
 QLabel {

@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QStandardPaths>
 #include <QFileDialog>
+#include <QMessageBox>
 
 AddItemView::AddItemView(QWidget *parent) : QWidget(parent)
 {
@@ -24,14 +25,17 @@ void AddItemView::setupUI()
     mainLayout->addWidget(formTitleLabel);
 
     mediaTypeCombo = new QComboBox(this);
-    mediaTypeCombo->addItems({"Book", "Film", "Music", "Video Game"});
+    mediaTypeCombo->addItems({"Book", "Movie", "Music", "Video Game"});
     
     titleEdit = new QLineEdit(this);
     titleEdit->setPlaceholderText("Insert Title...");
 
-    yearLabel = new QLabel("Year: ", this);
+    genreEdit = new QLineEdit(this);
+    genreEdit->setPlaceholderText("Insert Genre...");
+
     yearEdit = new QSpinBox(this);
     yearEdit->setRange(0, QDate::currentDate().year());
+    yearEdit->setSpecialValueText("Insert Year...");
 
     descriptionEdit = new QTextEdit(this);
     descriptionEdit->setMaximumHeight(100);
@@ -39,18 +43,70 @@ void AddItemView::setupUI()
 
     browseImageButton = new QPushButton("Select Image...", this);
 
-    addButton = new QPushButton("Add Item", this);
+    addButton = new QPushButton("Add Media", this);
 
     browseImageButton->setObjectName("imagebrowser");
 
+    pagesEditBook = new QSpinBox(this);
+    pagesEditBook->setMinimum(0);
+    pagesEditBook->setMaximum(INT_MAX);
+    pagesEditBook->setSpecialValueText("Pages...");
+    isbnEditBook = new QLineEdit(this);
+    isbnEditBook->setPlaceholderText("ISBN...");
+    publisherEditBook = new QLineEdit(this);
+    publisherEditBook->setPlaceholderText("Publisher...");
+    authorEditBook = new QLineEdit(this);
+    authorEditBook->setPlaceholderText("Author...");
+
+    durationEditMovie = new QSpinBox(this);
+    durationEditMovie->setMinimum(0);
+    durationEditMovie->setMaximum(INT_MAX);
+    durationEditMovie->setSpecialValueText("Duration (minutes)...");
+    ratingEditMovie = new QSpinBox(this);
+    ratingEditMovie->setMinimum(1);
+    ratingEditMovie->setMaximum(5);
+    ratingEditMovie->setSpecialValueText("Rating...");
+    studioEditMovie = new QLineEdit(this);
+    studioEditMovie->setPlaceholderText("Studio...");
+    directorEditMovie = new QLineEdit(this);
+    directorEditMovie->setPlaceholderText("Director...");
+    formatEditMusic = new QLineEdit(this);
+    formatEditMusic->setPlaceholderText("Format...");
+    labelEditMusic = new QLineEdit(this);
+    labelEditMusic->setPlaceholderText("Label...");
+    durationEditMusic = new QSpinBox(this);
+    durationEditMusic->setMinimum(0);
+    durationEditMusic->setMaximum(INT_MAX);
+    durationEditMusic->setSpecialValueText("Duration (minutes)...");
+    platformEditVideogame = new QLineEdit(this);
+    platformEditVideogame->setPlaceholderText("Platform...");
+    developerEditVideogame = new QLineEdit(this);
+    developerEditVideogame->setPlaceholderText("Developer...");
+    publisherEditVideogame = new QLineEdit(this);
+    publisherEditVideogame->setPlaceholderText("Publisher...");
+    playtimeEditVideogame = new QSpinBox(this);
+    playtimeEditVideogame->setSpecialValueText("Playtime (hours)...");
+
     QFormLayout *formLayout = new QFormLayout();    
 
-    formLayout->addRow("Select Media Type: ", mediaTypeCombo);
+    formLayout->addRow(mediaTypeCombo);
     formLayout->addRow(browseImageButton);
-    formLayout->addRow(titleEdit);
+    formLayout->addRow(genreEdit, titleEdit);
     formLayout->addRow(descriptionEdit);
-    formLayout->addRow(yearLabel, yearEdit);
+    formLayout->addRow(yearEdit);
+
+    formLayout->addRow(pagesEditBook, isbnEditBook);
+    formLayout->addRow(publisherEditBook, authorEditBook);
+
+    formLayout->addRow(durationEditMovie, ratingEditMovie);
+    formLayout->addRow(studioEditMovie, directorEditMovie);
     
+    formLayout->addRow(formatEditMusic);
+    formLayout->addRow(labelEditMusic, durationEditMusic);
+    
+    formLayout->addRow(platformEditVideogame, developerEditVideogame);
+    formLayout->addRow(publisherEditVideogame, playtimeEditVideogame);
+
     mainLayout->addLayout(formLayout);
     mainLayout->addWidget(addButton);
     mainLayout->addStretch();
@@ -74,40 +130,138 @@ void AddItemView::onMediaTypeChanged(int index)
 void AddItemView::toggleFields()
 {
     QString mediaType = mediaTypeCombo->currentText();
+
+    pagesEditBook->setVisible(false);
+    isbnEditBook->setVisible(false);
+    publisherEditBook->setVisible(false);
+    authorEditBook->setVisible(false);
+
+    durationEditMovie->setVisible(false);
+    ratingEditMovie->setVisible(false);
+    studioEditMovie->setVisible(false);
+    directorEditMovie->setVisible(false);
+
+    formatEditMusic->setVisible(false);
+    labelEditMusic->setVisible(false);
+    durationEditMusic->setVisible(false);
+
+    platformEditVideogame->setVisible(false);
+    developerEditVideogame->setVisible(false);
+    publisherEditVideogame->setVisible(false);
+    playtimeEditVideogame->setVisible(false);
     
     // Mostra solo i campi rilevanti in base al media type
     if (mediaType == "Book") {
-        //
-    } else if (mediaType == "Film") {
-        //
+        pagesEditBook->setVisible(true);
+        isbnEditBook->setVisible(true);
+        publisherEditBook->setVisible(true);
+        authorEditBook->setVisible(true);
+        durationEditMovie->setVisible(false);
+        ratingEditMovie->setVisible(false);
+        studioEditMovie->setVisible(false);
+        directorEditMovie->setVisible(false);
+        formatEditMusic->setVisible(false);
+        labelEditMusic->setVisible(false);
+        durationEditMusic->setVisible(false);
+        platformEditVideogame->setVisible(false);
+        developerEditVideogame->setVisible(false);
+        publisherEditVideogame->setVisible(false);
+        playtimeEditVideogame->setVisible(false);
+    } else if (mediaType == "Movie") {
+        pagesEditBook->setVisible(false);
+        isbnEditBook->setVisible(false);
+        publisherEditBook->setVisible(false);
+        authorEditBook->setVisible(false);
+        durationEditMovie->setVisible(true);
+        ratingEditMovie->setVisible(true);
+        studioEditMovie->setVisible(true);
+        directorEditMovie->setVisible(true);
+        formatEditMusic->setVisible(false);
+        labelEditMusic->setVisible(false);
+        durationEditMusic->setVisible(false);
+        platformEditVideogame->setVisible(false);
+        developerEditVideogame->setVisible(false);
+        publisherEditVideogame->setVisible(false);
+        playtimeEditVideogame->setVisible(false);
     } else if (mediaType == "Music") {
-        //
+        pagesEditBook->setVisible(false);
+        isbnEditBook->setVisible(false);
+        publisherEditBook->setVisible(false);
+        authorEditBook->setVisible(false);
+        durationEditMovie->setVisible(false);
+        ratingEditMovie->setVisible(false);
+        studioEditMovie->setVisible(false);
+        directorEditMovie->setVisible(false);
+        formatEditMusic->setVisible(true);
+        labelEditMusic->setVisible(true);
+        durationEditMusic->setVisible(true);
+        platformEditVideogame->setVisible(false);
+        developerEditVideogame->setVisible(false);
+        publisherEditVideogame->setVisible(false);
+        playtimeEditVideogame->setVisible(false);
     } else if (mediaType == "Video Game") {
-        //
+        pagesEditBook->setVisible(false);
+        isbnEditBook->setVisible(false);
+        publisherEditBook->setVisible(false);
+        authorEditBook->setVisible(false);
+        durationEditMovie->setVisible(false);
+        ratingEditMovie->setVisible(false);
+        studioEditMovie->setVisible(false);
+        directorEditMovie->setVisible(false);
+        formatEditMusic->setVisible(false);
+        labelEditMusic->setVisible(false);
+        durationEditMusic->setVisible(false);
+        platformEditVideogame->setVisible(true);
+        developerEditVideogame->setVisible(true);
+        publisherEditVideogame->setVisible(true);
+        playtimeEditVideogame->setVisible(true);
     }
 }
 
 void AddItemView::onAddButtonClicked()
 {
-    // Basic validation
+    // Validazione
     if (titleEdit->text().isEmpty()) {
-        qDebug() << "Title is required!";
+        QMessageBox::warning(this, "Error", "Title is required!");
         return;
     }
     
-    QString mediaType = mediaTypeCombo->currentText();
-    qDebug() << "Adding" << mediaType << ":" << titleEdit->text();
-    
-    // Qui aggiungerai la logica per creare l'oggetto Media appropriato
-    // e aggiungerlo alla collection
+    // SALVA il media nel JSON ← QUESTA RIGA MANCAVA!
+    saveMediaToJson();
     
     clearForm();
     emit itemAdded();
+    
+    QMessageBox::information(this, "Success", "Media added successfully!");
 }
 
 void AddItemView::clearForm()
 {
-    //
+    descriptionEdit->clear();
+    titleEdit->clear();
+    genreEdit->clear();
+    yearEdit->clear();
+    
+    pagesEditBook->clear();
+    isbnEditBook->clear();
+    publisherEditBook->clear();
+    authorEditBook->clear(); 
+
+    durationEditMovie->clear();
+    ratingEditMovie->clear();
+    studioEditMovie->clear();
+    directorEditMovie->clear();
+
+    formatEditMusic->clear();
+    labelEditMusic->clear();
+    durationEditMusic->clear();
+    
+    platformEditVideogame->clear();
+    developerEditVideogame->clear();
+    publisherEditVideogame->clear();
+    playtimeEditVideogame->clear();
+
+    toggleFields();
 }
 
 void AddItemView::onBrowseImageClicked() 
@@ -128,4 +282,55 @@ void AddItemView::onBrowseImageClicked()
         QFileInfo fileInfo(imagePath);
         browseImageButton->setText(fileInfo.fileName());
     }
+}
+
+void AddItemView::saveMediaToJson()
+{
+    QString mediaType = mediaTypeCombo->currentText();
+    QMap<QString, QVariant> data;
+    
+    // Campi comuni a tutti i media
+    data["title"] = titleEdit->text();
+    data["year"] = yearEdit->value();
+    data["description"] = descriptionEdit->toPlainText();
+    data["genre"] = genreEdit->text();
+    data["imagePath"] = currentImagePath;
+
+    qDebug() << "Saving media type:" << mediaType;
+    qDebug() << "Title:" << titleEdit->text();
+    qDebug() << "Year:" << yearEdit->value();
+    qDebug() << "Genre:" << genreEdit->text();
+    qDebug() << "Image Path:" << currentImagePath;
+    
+    // Campi specifici per tipo di media
+    if (mediaType == "Book") {
+        data["author"] = authorEditBook->text();
+        data["pages"] = pagesEditBook->value();
+        data["isbn"] = isbnEditBook->text();
+        data["publisher"] = publisherEditBook->text();
+    }
+    else if (mediaType == "Movie") {
+        data["director"] = directorEditMovie->text();
+        data["duration"] = durationEditMovie->value();
+        data["rating"] = ratingEditMovie->value();
+        data["studio"] = studioEditMovie->text();
+    }
+    else if (mediaType == "Music") {
+        data["artist"] = authorEditBook->text();
+        data["duration"] = durationEditMusic->value();
+        data["format"] = formatEditMusic->text();
+        data["label"] = labelEditMusic->text();
+    }
+    else if (mediaType == "Video Game") {
+        data["developer"] = developerEditVideogame->text();
+        data["platform"] = platformEditVideogame->text();
+        data["publisher"] = publisherEditVideogame->text();
+        data["playtime"] = playtimeEditVideogame->value();
+    }
+    
+    QJsonObject mediaJson = JsonManager::mediaToJson(mediaType, data);
+    jsonManager.addMedia(mediaJson);
+    
+    qDebug() << "JSON saved successfully!";
+    qDebug() << "File path:" << QDir::currentPath() + "/media.json";
 }
