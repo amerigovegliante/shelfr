@@ -36,7 +36,7 @@ private slots:
     void onDeleteMediaRequested(Media* mediaToDelete); // Slot per la delete
 
 private:
-    QJsonObject convertMediaToJson(Media* media);
+    
     void setupUI();
     void loadMediaItems();
     void filterMediaByTitle(const QString& searchText);

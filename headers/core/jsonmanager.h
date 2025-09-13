@@ -9,6 +9,8 @@
 #include <QDateTime>
 #include <QObject>  // Aggiungi questo
 
+#include "media.h"
+
 class JsonManager : public QObject  // eredita da QObject
 {
     Q_OBJECT  // Aggiungi questa macro
@@ -19,6 +21,9 @@ public:
         bool loadFromFile();
         bool saveToFile() const;
         void replaceMediaArray(const QJsonArray& newArray);
+
+        QJsonObject convertMediaToJson(Media* media);
+        Media* createMediaFromJson(const QJsonObject& mediaObj);
 
         void addMedia(const QJsonObject&);
         QJsonArray getMedia() const;

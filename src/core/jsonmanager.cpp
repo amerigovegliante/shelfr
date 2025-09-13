@@ -7,6 +7,12 @@
 #include <QDir>
 #include <QFileInfo>
 
+#include "../../headers/core/media.h"
+#include "../../headers/core/book.h"
+#include "../../headers/core/film.h"
+#include "../../headers/core/music.h"
+#include "../../headers/core/videogame.h"
+
 JsonManager::JsonManager(QObject* parent) : QObject(parent), fileName("media.json")
 {
     // Usa la directory dell'eseguibile (cartella di build)
@@ -146,4 +152,113 @@ void JsonManager::replaceMediaArray(const QJsonArray& newArray)
 {
     mediaArray = newArray;
     saveToFile();
+}
+
+QJsonObject JsonManager::convertMediaToJson(Media* media)
+{
+    if (!media) return QJsonObject();
+    
+    QMap<QString, QVariant> data;
+    
+    // Campi comuni a tutti i media
+    data["title"] = media->getTitle();
+    data["year"] = media->getYear();
+    data["description"] = media->getDescription();
+    data["genre"] = media->getGenre();
+    data["imagePath"] = media->getImagePath();
+    
+    // Campi specifici per tipo
+    if (Book* book = dynamic_cast<Book*>(media)) {
+        data["author"] = book->getAuthor();
+        data["pages"] = book->getPages();
+        data["isbn"] = book->getISBN();
+        data["publisher"] = book->getPublisher();
+        return JsonManager::mediaToJson("Book", data);
+    }
+    else if (Film* film = dynamic_cast<Film*>(media)) {
+        data["director"] = film->getDirector();
+        data["duration"] = film->getDuration();
+        data["rating"] = film->getRating();
+        data["studio"] = film->getStudio();
+        return JsonManager::mediaToJson("Film", data);
+    }
+    else if (Music* music = dynamic_cast<Music*>(media)) {
+        data["duration"] = music->getDuration();
+        data["format"] = music->getFormat();
+        data["label"] = music->getLabel();
+        return JsonManager::mediaToJson("Music", data);
+    }
+    else if (Videogame* game = dynamic_cast<Videogame*>(media)) {
+        data["developer"] = game->getDeveloper();
+        data["platform"] = game->getPlatform();
+        data["publisher"] = game->getPublisher();
+        data["playtime"] = game->getPlaytime();
+        return JsonManager::mediaToJson("Video Game", data);
+    }
+    
+    return QJsonObject();
+}
+
+Media* JsonManager::createMediaFromJson(const QJsonObject& mediaObj)
+{
+    QString type = mediaObj["type"].toString();
+    Media* media = nullptr;
+    
+    if (type == "Book") {
+        media = new Book(
+            mediaObj["title"].toString(),
+            mediaObj["description"].toString(),
+            mediaObj["genre"].toString(),
+            mediaObj["imagePath"].toString(),
+            mediaObj["year"].toInt(),
+            mediaObj["pages"].toInt(), // Assicurati che il campo sia "pages" non "pageCount"
+            mediaObj["isbn"].toString(),
+            mediaObj["publisher"].toString(),
+            mediaObj["author"].toString()
+        );
+    }
+    else if (type == "Film") {
+        media = new Film(
+            mediaObj["title"].toString(),
+            mediaObj["description"].toString(),
+            mediaObj["genre"].toString(),
+            mediaObj["imagePath"].toString(),
+            mediaObj["year"].toInt(),
+            mediaObj["duration"].toInt(),
+            mediaObj["rating"].toInt(),
+            mediaObj["studio"].toString(),
+            mediaObj["director"].toString()
+        );
+    }
+    else if (type == "Music") {
+        media = new Music(
+            mediaObj["title"].toString(),
+            mediaObj["description"].toString(),
+            mediaObj["genre"].toString(),
+            mediaObj["imagePath"].toString(),
+            mediaObj["year"].toInt(),
+            mediaObj["format"].toString(),
+            mediaObj["label"].toString(),
+            mediaObj["duration"].toInt()
+        );
+    }
+    else if (type == "Video Game") {
+        media = new Videogame(
+            mediaObj["title"].toString(),
+            mediaObj["description"].toString(),
+            mediaObj["genre"].toString(),
+            mediaObj["imagePath"].toString(),
+            mediaObj["year"].toInt(),
+            mediaObj["platform"].toString(),
+            mediaObj["developer"].toString(),
+            mediaObj["publisher"].toString(),
+            mediaObj["playtime"].toInt()
+        );
+    }
+    
+    if (!media) {
+        qWarning() << "Unknown media type:" << type;
+    }
+    
+    return media;
 }
