@@ -12,8 +12,11 @@ class Book : public Media
         QString author;
     public:    
         Book(const QString&, const QString&, const QString&, const QString&, int, int, const QString&, const QString&, const QString&);
+        Book(const Book&);
 
+        virtual void accept(MediaVisitorInterface&) override;
         virtual ~Book() override = default;
+        Book* clone() const override;
 
         int getPages() const;
         QString getISBN() const;

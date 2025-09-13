@@ -3,6 +3,7 @@
 
 Workspace::Workspace(QWidget* parent) : QFrame(parent)
 {
+    jsonManager = new JsonManager(this);
     this->setObjectName("workspace");
 
     layout = new QVBoxLayout(this);
@@ -13,8 +14,8 @@ Workspace::Workspace(QWidget* parent) : QFrame(parent)
     layout->addWidget(stackedWidget);
 
     defaultView = new DefaultView(this);
-    addItemView = new AddItemView(this);
-    searchItemView = new QWidget();
+    addItemView = new AddItemView(jsonManager, this);
+    searchItemView = new SearchItemView(jsonManager, this);
     addCollectionView = new QWidget();
     searchCollectionView = new QWidget();
 
@@ -36,6 +37,22 @@ Workspace::Workspace(QWidget* parent) : QFrame(parent)
     stackedWidget->addWidget(searchItemView);
     stackedWidget->addWidget(addCollectionView);
     stackedWidget->addWidget(searchCollectionView);
+
+    connect(jsonManager, &JsonManager::mediaDataChanged, this, [this]() {
+        qDebug() << "JsonManager: media data changed, refreshing view...";
+        searchItemView->refresh(); // Assicurati che MediaView abbia questo metodo
+    });
+    
+    // Connetti anche il segnale itemAdded per doppia sicurezza
+    connect(addItemView, &AddItemView::itemAdded, this, [this]() {
+        qDebug() << "AddItemView: item added, forcing refresh...";
+        searchItemView->refresh();
+    });
+    connect(searchItemView, &SearchItemView::mediaDeleted, this, [this]() {
+    qDebug() << "Media deleted, refreshing views...";
+    searchItemView->refresh(); // Aggiorna la view
+    // Potresti anche voler aggiornare altre view
+});
 
     showDefaultView();
 }

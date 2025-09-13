@@ -7,7 +7,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-AddItemView::AddItemView(QWidget *parent) : QWidget(parent)
+AddItemView::AddItemView(JsonManager* jsonManager, QWidget* parent) 
+    : QWidget(parent), jsonManager(jsonManager) // Inizializza il puntatore
 {
     setupUI();
     setupConnections();
@@ -25,7 +26,7 @@ void AddItemView::setupUI()
     mainLayout->addWidget(formTitleLabel);
 
     mediaTypeCombo = new QComboBox(this);
-    mediaTypeCombo->addItems({"Book", "Movie", "Music", "Video Game"});
+    mediaTypeCombo->addItems({"Book", "Film", "Music", "Video Game"});
     
     titleEdit = new QLineEdit(this);
     titleEdit->setPlaceholderText("Insert Title...");
@@ -167,7 +168,7 @@ void AddItemView::toggleFields()
         developerEditVideogame->setVisible(false);
         publisherEditVideogame->setVisible(false);
         playtimeEditVideogame->setVisible(false);
-    } else if (mediaType == "Movie") {
+    } else if (mediaType == "Film") {
         pagesEditBook->setVisible(false);
         isbnEditBook->setVisible(false);
         publisherEditBook->setVisible(false);
@@ -240,26 +241,38 @@ void AddItemView::clearForm()
     descriptionEdit->clear();
     titleEdit->clear();
     genreEdit->clear();
-    yearEdit->clear();
     
-    pagesEditBook->clear();
+    // Per gli QSpinBox, non usare clear() ma reimposta ai valori iniziali
+    yearEdit->setValue(0);  // Imposta a 0 per mostrare il specialValueText
+    pagesEditBook->setValue(0);
+    durationEditMovie->setValue(0);
+    ratingEditMovie->setValue(1);  // Rating non può essere 0, quindi impostalo al minimo
+    durationEditMusic->setValue(0);
+    playtimeEditVideogame->setValue(0);
+    
+    // Pulisci le QLineEdit
     isbnEditBook->clear();
     publisherEditBook->clear();
     authorEditBook->clear(); 
-
-    durationEditMovie->clear();
-    ratingEditMovie->clear();
     studioEditMovie->clear();
     directorEditMovie->clear();
-
     formatEditMusic->clear();
     labelEditMusic->clear();
-    durationEditMusic->clear();
-    
     platformEditVideogame->clear();
     developerEditVideogame->clear();
     publisherEditVideogame->clear();
-    playtimeEditVideogame->clear();
+
+    // 🔥 REIMPOSTA I SPECIAL VALUE TEXT (importante!)
+    yearEdit->setSpecialValueText("Insert Year...");
+    pagesEditBook->setSpecialValueText("Pages...");
+    durationEditMovie->setSpecialValueText("Duration (minutes)...");
+    ratingEditMovie->setSpecialValueText("Rating...");
+    durationEditMusic->setSpecialValueText("Duration (minutes)...");
+    playtimeEditVideogame->setSpecialValueText("Playtime (hours)...");
+
+    // Reimposta il percorso dell'immagine
+    currentImagePath.clear();
+    browseImageButton->setText("Select Image...");
 
     toggleFields();
 }
@@ -296,12 +309,6 @@ void AddItemView::saveMediaToJson()
     data["genre"] = genreEdit->text();
     data["imagePath"] = currentImagePath;
 
-    qDebug() << "Saving media type:" << mediaType;
-    qDebug() << "Title:" << titleEdit->text();
-    qDebug() << "Year:" << yearEdit->value();
-    qDebug() << "Genre:" << genreEdit->text();
-    qDebug() << "Image Path:" << currentImagePath;
-    
     // Campi specifici per tipo di media
     if (mediaType == "Book") {
         data["author"] = authorEditBook->text();
@@ -309,7 +316,7 @@ void AddItemView::saveMediaToJson()
         data["isbn"] = isbnEditBook->text();
         data["publisher"] = publisherEditBook->text();
     }
-    else if (mediaType == "Movie") {
+    else if (mediaType == "Film") {
         data["director"] = directorEditMovie->text();
         data["duration"] = durationEditMovie->value();
         data["rating"] = ratingEditMovie->value();
@@ -329,8 +336,8 @@ void AddItemView::saveMediaToJson()
     }
     
     QJsonObject mediaJson = JsonManager::mediaToJson(mediaType, data);
-    jsonManager.addMedia(mediaJson);
+    jsonManager->addMedia(mediaJson); // Usa il puntatore
     
     qDebug() << "JSON saved successfully!";
-    qDebug() << "File path:" << QDir::currentPath() + "/media.json";
+    qDebug() << "Current items in shared manager:" << jsonManager->getMedia().size();
 }

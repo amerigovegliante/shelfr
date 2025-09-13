@@ -3,6 +3,8 @@
 
 #include <QString>
 
+#include "mediavisitorinterface.h"
+
 class Media 
 {       
     private:
@@ -14,10 +16,12 @@ class Media
         int year;
     public:
         Media(const QString&, const QString&, const QString&, const QString&, int);
-        virtual ~Media();
-
         Media(const Media&);
-        virtual Media* clone() = 0;
+        
+        virtual ~Media();
+        virtual Media* clone() const = 0;
+
+        virtual void accept(MediaVisitorInterface&) = 0;
 
         QString getTitle() const;
         QString getDescription() const;

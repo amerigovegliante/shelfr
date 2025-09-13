@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(sidebar, &Sidebar::searchItemClicked, this, &MainWindow::onSearchItemClicked);
     connect(sidebar, &Sidebar::addCollectionClicked, this, &MainWindow::onAddCollectionClicked);
     connect(sidebar, &Sidebar::searchCollectionClicked, this, &MainWindow::onSearchCollectionClicked);
-    
+
     setCentralWidget(mainSplitter);
 
     qDebug() << "MainWindow created";

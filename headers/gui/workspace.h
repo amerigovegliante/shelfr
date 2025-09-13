@@ -3,6 +3,7 @@
 
 #include "defaultview.h"
 #include "additemview.h"
+#include "searchitemview.h"
 #include <QFrame>
 #include <QStackedWidget>
 #include <QVBoxLayout>
@@ -27,9 +28,11 @@ class Workspace: public QFrame
 
         DefaultView* defaultView;
         AddItemView* addItemView;
-        QWidget* searchItemView;
+        SearchItemView* searchItemView;
         QWidget* addCollectionView;
         QWidget* searchCollectionView;
+
+        JsonManager* jsonManager;
 };
 
 #endif

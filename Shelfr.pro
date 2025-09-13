@@ -19,7 +19,13 @@ HEADERS += \
     headers/gui/workspace.h \
     headers/gui/thememanager.h \
     headers/gui/defaultview.h \
-    headers/gui/additemview.h 
+    headers/gui/additemview.h \
+    headers/gui/searchitemview.h \
+    headers/gui/mediacard.h \
+    headers/gui/edititemview.h \
+    headers/gui/viewitemview.h \
+    headers/gui/mediacardvisitor.h \
+    headers/gui/mediafiltervisitor.h
 
 # Sources
 SOURCES += \
@@ -36,9 +42,15 @@ SOURCES += \
     src/gui/mainwindow.cpp \
     src/gui/sidebar.cpp \
     src/gui/workspace.cpp \
-    src/gui/thememanager.cpp\
+    src/gui/thememanager.cpp \
     src/gui/defaultview.cpp \
-    src/gui/additemview.cpp
+    src/gui/additemview.cpp \
+    src/gui/searchitemview.cpp \
+    src/gui/mediacard.cpp \
+    src/gui/edititemview.cpp \
+    src/gui/viewitemview.cpp \
+    src/gui/mediacardvisitor.cpp \
+    src/gui/mediafiltervisitor.cpp
 
 # Resources
 RESOURCES += resources.qrc

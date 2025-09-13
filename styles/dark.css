@@ -99,3 +99,9 @@ QCheckBox::indicator:unchecked:hover {
 QCheckBox::indicator:checked:hover {
     background: #45a049;
 }
+
+QWidget#media-card
+{
+    border: 2px solid black;
+    background-color: darkblue;
+}

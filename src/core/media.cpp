@@ -1,11 +1,18 @@
 #include "../../headers/core/media.h"
 
-Media::Media(const QString& t, const QString& d, const QString& g, const QString& ip, int y): 
-    title(!(t.isNull() && t.isEmpty()) ? t : "Default Title"),  
-    description(!(d.isNull() && d.isEmpty()) ? d : "Default Description"),
-    genre(!(g.isNull() && g.isEmpty()) ? g : "Default Genre"),
-    imagepath(!(ip.isNull() && ip.isEmpty()) ? ip : ":/images/default.jpg"),
-    year((y != NULL) ? y : 0) {}
+Media::Media(const QString& title, const QString& description, const QString& genre, const QString& imagepath, int year): 
+    title(!(title.isNull() && title.isEmpty()) ? title : "Default Title"),  
+    description(!(description.isNull() && description.isEmpty()) ? description : "Default Description"),
+    genre(!(genre.isNull() && genre.isEmpty()) ? genre : "Default Genre"),
+    imagepath(!(imagepath.isNull() && imagepath.isEmpty()) ? imagepath : ":/images/default.jpg"),
+    year((year != NULL) ? year : 0) {}
+
+Media::Media(const Media& media):
+    title(media.title),
+    description(media.description),
+    genre(media.genre),
+    imagepath(media.imagepath)
+{}
 
 Media::~Media(){}
 

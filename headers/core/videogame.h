@@ -12,8 +12,11 @@ class Videogame: public Media
         int playtime;
     public:
         Videogame(const QString&, const QString&, const QString&, const QString&, int, const QString&, const QString&, const QString&, int);
+        Videogame(const Videogame&);
 
+        virtual void accept(MediaVisitorInterface&) override;
         virtual ~Videogame() override = default;
+        Videogame* clone() const override;
 
         QString getPlatform() const;
         QString getDeveloper() const;

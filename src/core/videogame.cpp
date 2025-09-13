@@ -1,12 +1,27 @@
 #include "../../headers/core/videogame.h"
 
-Videogame::Videogame(const QString& t, const QString& d, const QString& g, const QString& ip, int y, const QString& pf, const QString& dev, const QString& publ, int pt):
-    Media(t,d,g,ip,y),
-    platform(!(pf.isNull() && pf.isEmpty()) ? pf : "Default Videogame Platform"),
-    developer(!(dev.isNull() && dev.isEmpty()) ? dev : "Default Developer"),
-    publisher(!(publ.isNull() && publ.isEmpty()) ? publ : "Default Videogame Publisher"),
-    playtime((pt > 0) ? pt : 0)
+Videogame::Videogame(const QString& title, const QString& description, const QString& genre, const QString& imagepath, int year, const QString& platform, const QString& developer, const QString& publisher, int playTime):
+    Media(title,description,genre,imagepath,year),
+    platform(!(platform.isNull() && platform.isEmpty()) ? platform : "Default Videogame Platform"),
+    developer(!(developer.isNull() && developer.isEmpty()) ? developer : "Default Developer"),
+    publisher(!(publisher.isNull() && publisher.isEmpty()) ? publisher : "Default Videogame Publisher"),
+    playtime((playtime > 0) ? playtime : 0)
 {}
+
+Videogame::Videogame(const Videogame& videogame):
+    Media(videogame),
+    platform(videogame.platform),
+    developer(videogame.developer),
+    publisher(videogame.publisher),
+    playtime(videogame.playtime)
+{}
+
+void Videogame::accept(MediaVisitorInterface& visitor)
+{
+    visitor.visit(*this);
+}
+
+Videogame* Videogame::clone() const { return new Videogame(*this);}
 
 QString Videogame::getPlatform() const
 {

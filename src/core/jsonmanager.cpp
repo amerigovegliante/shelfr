@@ -3,28 +3,57 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QDebug>
+#include <QCoreApplication>
+#include <QDir>
+#include <QFileInfo>
 
-JsonManager::JsonManager() : fileName("media.json")
+JsonManager::JsonManager(QObject* parent) : QObject(parent), fileName("media.json")
 {
+    // Usa la directory dell'eseguibile (cartella di build)
+    QString appDir = QCoreApplication::applicationDirPath();
+    fileName = QDir(appDir).filePath("media.json");
+    
+    qDebug() << "JSON file location:" << fileName;
     loadFromFile();
 }
 
 bool JsonManager::loadFromFile()
 {
     QFile file(fileName);
+    
+    // Se il file non esiste, crea un array vuoto
+    if (!file.exists()) {
+        qDebug() << "File doesn't exist, creating new array";
+        mediaArray = QJsonArray();
+        
+        // Salva array vuoto per creare il file
+        return saveToFile();
+    }
+    
     if (!file.open(QIODevice::ReadOnly)) {
         qWarning() << "Could not open file for reading:" << fileName;
-        mediaArray = QJsonArray(); // Array vuoto
+        qWarning() << "Error:" << file.errorString();
+        mediaArray = QJsonArray();
         return false;
     }
     
     QByteArray data = file.readAll();
     file.close();
     
-    QJsonDocument doc = QJsonDocument::fromJson(data);
+    QJsonParseError error;
+    QJsonDocument doc = QJsonDocument::fromJson(data, &error);
+    
+    if (error.error != QJsonParseError::NoError) {
+        qWarning() << "JSON parse error:" << error.errorString();
+        mediaArray = QJsonArray();
+        return false;
+    }
+    
     if (doc.isArray()) {
         mediaArray = doc.array();
+        qDebug() << "Loaded" << mediaArray.size() << "media items from" << fileName;
     } else {
+        qWarning() << "JSON document is not an array, creating empty array";
         mediaArray = QJsonArray();
     }
     
@@ -33,11 +62,17 @@ bool JsonManager::loadFromFile()
 
 bool JsonManager::saveToFile() const
 {
-    QFile file(fileName);
+    // Assicurati che la directory esista
+    QFileInfo fileInfo(fileName);
+    QDir dir = fileInfo.dir();
+    if (!dir.exists()) {
+        if (!dir.mkpath(".")) {
+            qWarning() << "Failed to create directory:" << dir.path();
+            return false;
+        }
+    }
     
-    qDebug() << "Attempting to save to:" << fileName;
-    qDebug() << "File exists:" << file.exists();
-    qDebug() << "Is writable:" << file.isWritable();
+    QFile file(fileName);
     
     if (!file.open(QIODevice::WriteOnly)) {
         qWarning() << "Could not open file for writing:" << fileName;
@@ -46,15 +81,9 @@ bool JsonManager::saveToFile() const
     }
     
     QJsonDocument doc(mediaArray);
-    QByteArray jsonData = doc.toJson(QJsonDocument::Indented);
-    
-    qDebug() << "JSON data size:" << jsonData.size();
-    qDebug() << "JSON content:" << jsonData;
-    
-    file.write(jsonData);
+    file.write(doc.toJson(QJsonDocument::Indented));
     file.close();
     
-    qDebug() << "File written successfully!";
     return true;
 }
 
@@ -62,6 +91,10 @@ void JsonManager::addMedia(const QJsonObject &mediaObject)
 {
     mediaArray.append(mediaObject);
     bool success = saveToFile();
+
+    if (success) {
+        emit mediaDataChanged();  // EMETTI IL SEGNALE QUI
+    }
 
     qDebug() << "Add media - Success:" << success;
     qDebug() << "Current array size:" << mediaArray.size();
@@ -76,7 +109,11 @@ bool JsonManager::removeMedia(int index)
 {
     if (index >= 0 && index < mediaArray.size()) {
         mediaArray.removeAt(index);
-        return saveToFile();
+        bool success = saveToFile();
+        if (success) {
+            emit mediaDataChanged();  // Emetti il segnale anche per la rimozione
+        }
+        return success;
     }
     return false;
 }
@@ -92,4 +129,21 @@ QJsonObject JsonManager::mediaToJson(const QString &type, const QMap<QString, QV
     }
     
     return json;
+}
+
+void JsonManager::setFileName(const QString &newFileName)
+{
+    fileName = newFileName;
+    loadFromFile();
+}
+
+QString JsonManager::getFileName() const
+{
+    return fileName;
+}
+
+void JsonManager::replaceMediaArray(const QJsonArray& newArray)
+{
+    mediaArray = newArray;
+    saveToFile();
 }

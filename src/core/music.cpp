@@ -1,10 +1,24 @@
 #include "../../headers/core/music.h"
 
-Music::Music(const QString& t, const QString& d, const QString& g, const QString& ip, int y, const QString& frm, const QString& lbl, int dur):
-    Media(t,d,g,ip,y),
-    format(!(frm.isNull() && frm.isEmpty()) ? frm : "Default Music Format"),
-    label(!(lbl.isNull() && lbl.isEmpty()) ? lbl : "Default Music Label") 
+Music::Music(const QString& title, const QString& description, const QString& genre, const QString& imagepath, int year, const QString& format, const QString& label, int duration):
+    Media(title,description,genre,imagepath,year),
+    format(!(format.isNull() && format.isEmpty()) ? format : "Default Music Format"),
+    label(!(label.isNull() && label.isEmpty()) ? label : "Default Music Label") 
 {}
+
+Music::Music(const Music& music):
+    Media(music),
+    format(music.format),
+    label(music.label),
+    duration(music.duration)
+{}
+
+void Music::accept(MediaVisitorInterface& visitor)
+{
+    visitor.visit(*this);
+}
+
+Music* Music::clone() const { return new Music(*this);}
 
 QString Music::getFormat() const 
 {

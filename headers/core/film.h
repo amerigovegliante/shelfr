@@ -13,8 +13,11 @@ class Film : public Media
         QString director;
     public:    
         Film(const QString&, const QString&, const QString&, const QString&, int, int, int, const QString&, const QString&);
+        Film(const Film&);
 
+        virtual void accept(MediaVisitorInterface&) override;
         virtual ~Film() override = default;
+        Film* clone() const override;
 
         int getDuration() const;
         int getRating() const;

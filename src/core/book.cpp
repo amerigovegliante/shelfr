@@ -1,14 +1,31 @@
 #include "../../headers/core/book.h"
 
-Book::Book(const QString& t, const QString& d, const QString& g, const QString& ip, int y, int p, const QString& in, const QString& ps, const QString& auth):
-    Media::Media(t,d,g,ip,y),
-    pages((p != NULL) ? p : 0),
-    isbn((!(in.isNull() && in.isEmpty()) ? in : "Default-ISBN")),
-    publisher(!(ps.isNull() && ps.isEmpty()) ? ps : "Default-Publisher"),
-    author(!(auth.isNull() && auth.isEmpty()) ? auth : "Default Book Author")
+Book::Book(const QString& title, const QString& description, const QString& genre, const QString& imagepath, int year, int pages, const QString& isbn, const QString& publisher, const QString& author):
+    Media::Media(title,description,genre,imagepath,year),
+    pages((pages != NULL) ? pages : 0),
+    isbn((!(isbn.isNull() && isbn.isEmpty()) ? isbn : "Default-ISBN")),
+    publisher(!(publisher.isNull() && publisher.isEmpty()) ? publisher : "Default-Publisher"),
+    author(!(author.isNull() && author.isEmpty()) ? author : "Default Book Author")
 {}
 
+Book::Book(const Book& book):
+    Media(book),
+    pages(book.pages),
+    isbn(book.isbn),
+    publisher(book.publisher),
+    author(book.author)
+{}
+
+void Book::accept(MediaVisitorInterface& visitor)
+{
+    visitor.visit(*this);
+}
+
+Book* Book::clone() const { return new Book(*this); }
+
 int Book::getPages() const { return Book::pages; }
+
+QString Book::getAuthor() const { return author;}
 
 QString Book::getISBN() const { return Book::isbn; }
 

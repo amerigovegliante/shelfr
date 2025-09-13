@@ -31,8 +31,6 @@ private:
     QHBoxLayout *themeLayout;
     QPushButton *addItemButton;
     QPushButton *searchItemButton;
-    QPushButton *addCollectionButton;
-    QPushButton *searchCollectionButton;
     QCheckBox *themeSwitch;
     QLabel *themeLabel;
     QLabel *title;

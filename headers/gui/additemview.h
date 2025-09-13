@@ -11,14 +11,15 @@
 #include <QString>
 #include <QSpinBox>
 
-#include "../core/jsonmanager.h"
+// Forward declaration per evitare inclusioni circolari
+#include "../../headers/core/jsonmanager.h"
 
 class AddItemView : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit AddItemView(QWidget *parent = nullptr);
+    explicit AddItemView(JsonManager* jsonManager, QWidget* parent = nullptr); // Modificato
     void clearForm();
 
 signals:
@@ -41,7 +42,6 @@ private:
     QLineEdit* titleEdit;
     QLineEdit* genreEdit;
     QSpinBox* yearEdit;
-
 
     QPushButton* addButton;
     QPushButton* browseImageButton;
@@ -66,7 +66,7 @@ private:
     QLineEdit* publisherEditVideogame;
     QSpinBox* playtimeEditVideogame;
 
-    JsonManager jsonManager;
+    JsonManager* jsonManager; // Cambiato da oggetto a puntatore
 };
 
-#endif // ADDITEMVIEW_H
+#endif

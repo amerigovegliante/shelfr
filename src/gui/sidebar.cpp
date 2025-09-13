@@ -23,13 +23,11 @@ Sidebar::Sidebar(QWidget* parent) : QFrame(parent)
     
     addItemButton = new QPushButton("Add Item", this);
     searchItemButton = new QPushButton("Search Item", this);
-    addCollectionButton = new QPushButton("Add Collection", this);
-    searchCollectionButton = new QPushButton("Search Collection", this);
     
     themeSwitch = new QCheckBox(this);
     themeSwitch->setChecked(ThemeManager::instance().isDark());
     
-    themeLabel = new QLabel(ThemeManager::instance().isDark() ? " Dark" : " Light", this);
+    themeLabel = new QLabel(ThemeManager::instance().isDark() ? "Dark" : "Light", this);
     themeLabel->setObjectName("theme-label");
 
     themeLayout = new QHBoxLayout();
@@ -40,8 +38,6 @@ Sidebar::Sidebar(QWidget* parent) : QFrame(parent)
     layout->addWidget(title);
     layout->addWidget(addItemButton);
     layout->addWidget(searchItemButton);
-    layout->addWidget(addCollectionButton);
-    layout->addWidget(searchCollectionButton);
     layout->addStretch();
     layout->addLayout(themeLayout);
 
@@ -50,8 +46,6 @@ Sidebar::Sidebar(QWidget* parent) : QFrame(parent)
 
     connect(addItemButton, &QPushButton::clicked, this, &Sidebar::addItemClicked);
     connect(searchItemButton, &QPushButton::clicked, this, &Sidebar::searchItemClicked);
-    connect(addCollectionButton, &QPushButton::clicked, this, &Sidebar::addCollectionClicked);
-    connect(searchCollectionButton, &QPushButton::clicked, this, &Sidebar::searchCollectionClicked);
 }
 
 void Sidebar::onThemeToggled(bool checked)
@@ -63,5 +57,5 @@ void Sidebar::onThemeChanged()
 {
     bool isDark = ThemeManager::instance().isDark();
     themeSwitch->setChecked(isDark);
-    themeLabel->setText(isDark ? " Dark" : " Light");
+    themeLabel->setText(isDark ? "Dark" : "Light");
 }
