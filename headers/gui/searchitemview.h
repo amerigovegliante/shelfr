@@ -10,6 +10,7 @@
 #include <QGridLayout>
 
 #include "../core/jsonmanager.h"
+#include "viewitemview.h"
 
 // Forward declarations
 class Media;
@@ -29,11 +30,13 @@ public:
 
 signals:
     void mediaDeleted(); // Segnale per notificare la delete
+    void viewMediaRequested(Media* media);
 
 private slots:
     void onSearchTextChanged(const QString& text);
     void onClearSearchClicked();
     void onDeleteMediaRequested(Media* mediaToDelete); // Slot per la delete
+    void onViewMediaRequested(Media* media);
 
 private:
     

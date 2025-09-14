@@ -8,7 +8,6 @@ HEADERS += \
     headers/core/book.h \
     headers/core/film.h \
     headers/core/media.h \
-    headers/core/mediaobserverinterface.h \
     headers/core/mediavisitorinterface.h \
     headers/core/music.h \
     headers/core/videogame.h \
@@ -33,7 +32,6 @@ SOURCES += \
     src/core/book.cpp \
     src/core/film.cpp \
     src/core/media.cpp \
-    src/core/mediaobserverinterface.cpp \
     src/core/mediavisitorinterface.cpp \
     src/core/music.cpp \
     src/core/videogame.cpp \

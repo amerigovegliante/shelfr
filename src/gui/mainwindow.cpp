@@ -30,8 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(sidebar, &Sidebar::addItemClicked, this, &MainWindow::onAddItemClicked);
     connect(sidebar, &Sidebar::searchItemClicked, this, &MainWindow::onSearchItemClicked);
-    connect(sidebar, &Sidebar::addCollectionClicked, this, &MainWindow::onAddCollectionClicked);
-    connect(sidebar, &Sidebar::searchCollectionClicked, this, &MainWindow::onSearchCollectionClicked);
 
     setCentralWidget(mainSplitter);
 
@@ -50,16 +48,4 @@ void MainWindow::onSearchItemClicked()
 {
     qDebug() << "search item clicked";
     workspace->showSearchItemView();
-}
-
-void MainWindow::onAddCollectionClicked()
-{
-    qDebug() << "add collection clicked";
-    workspace->showAddCollectionView();
-}
-
-void MainWindow::onSearchCollectionClicked()
-{
-    qDebug() <<"search collection clicked";
-    workspace->showSearchCollectionView();
 }

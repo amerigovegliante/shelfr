@@ -22,6 +22,7 @@ public:
 signals:
     void clicked(Media *media);
     void editRequested(Media *media);
+    void viewRequested(Media* media);
     void deleteRequested(Media *media);
 
 protected:

@@ -88,7 +88,16 @@ Media* MediaCard::getMedia() const
 void MediaCard::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
-        emit clicked(media);
+        // Verifica se il click è su un bottone
+        QPoint pos = event->pos();
+        if (deleteButton->geometry().contains(pos)) {
+            // Click sul bottone delete - già gestito
+        } else if (editButton->geometry().contains(pos)) {
+            // Click sul bottone edit - già gestito
+        } else {
+            // Click sulla card - emetti viewRequested
+            emit viewRequested(media);
+        }
     }
     QFrame::mousePressEvent(event);
 }

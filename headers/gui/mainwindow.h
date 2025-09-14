@@ -16,8 +16,6 @@ class MainWindow : public QMainWindow
     private slots:
         void onAddItemClicked();
         void onSearchItemClicked();
-        void onAddCollectionClicked();
-        void onSearchCollectionClicked();
     
     private:
         Sidebar* sidebar;

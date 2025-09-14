@@ -215,7 +215,7 @@ void SearchItemView::loadMediaItems()
             connect(card, &MediaCard::clicked, this, [this](Media* clickedMedia) {
                 qDebug() << "Media clicked:" << clickedMedia->getTitle();
             }, Qt::UniqueConnection);
-            
+            connect(card, &MediaCard::viewRequested, this, &SearchItemView::onViewMediaRequested);
             col++;
             if (col >= maxColumns) {
                 col = 0;
@@ -303,4 +303,11 @@ void SearchItemView::clearMediaList()
     mediaList.clear();
     allMediaList.clear();
     visibleMediaList.clear();
+}
+
+
+void SearchItemView::onViewMediaRequested(Media* media)
+{
+    qDebug() << "View requested for:" << media->getTitle();
+    emit viewMediaRequested(media);  // Inoltra alla Workspace
 }
