@@ -229,43 +229,40 @@ void SearchItemView::loadMediaItems()
 
 void SearchItemView::filterMediaByTitle(const QString& searchText)
 {
+    visibleMediaList.clear();
+
     if (searchText.isEmpty()) {
         visibleMediaList = allMediaList;
-        rebuildGridLayout();
-        return;
-    }
-
-    MediaFilterVisitor filterVisitor(searchText);
-    visibleMediaList.clear();
-    
-    for (Media* media : allMediaList) {
-        media->accept(filterVisitor);
-        if (filterVisitor.matches()) {
-            visibleMediaList.append(media);
+    } else {
+        for (Media* media : allMediaList) {
+            MediaFilterVisitor visitor(searchText); // 🔹 NUOVO visitor per ogni media
+            media->accept(visitor);
+            if (visitor.matches()) {
+                visibleMediaList.append(media);
+            }
         }
     }
-    
+
     rebuildGridLayout();
 }
 
 void SearchItemView::rebuildGridLayout()
 {
-    // Rimuovi tutti gli elementi dal layout senza eliminarli
-    QLayoutItem* item;
-    while ((item = gridLayout->takeAt(0)) != nullptr) {
-        delete item; // Solo l'item del layout, non il widget
+    // Prima nascondi tutte le card
+    for (MediaCard* card : mediaCardMap.values()) {
+        if (card) card->hide();
     }
 
-    // Riaggiungi i widget visibili mantenendo le card esistenti
-    int row = 0;
-    int col = 0;
+    // Poi mostra solo quelle visibili e ricostruisci il layout
+    int row = 0, col = 0;
     const int maxColumns = 3;
 
     for (Media* media : visibleMediaList) {
         MediaCard* card = mediaCardMap.value(media);
         if (card) {
             gridLayout->addWidget(card, row, col);
-            
+            card->show(); // 🔹 MOSTRA SOLO quelle filtrate
+
             col++;
             if (col >= maxColumns) {
                 col = 0;
@@ -274,6 +271,7 @@ void SearchItemView::rebuildGridLayout()
         }
     }
 }
+
 
 void SearchItemView::clearLayout()
 {
