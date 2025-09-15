@@ -7,8 +7,8 @@
 class Film : public Media
 {
     private:
-        int duration; // in minutes
-        int rating; // from 1 to 5
+        int duration;
+        int rating;
         QString studio;
         QString director;
     public:    

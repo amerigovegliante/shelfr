@@ -6,7 +6,7 @@
 class Music: public Media
 {
     private:
-        QString format; // vinyl or cd
+        QString format;
         QString label;
         int duration;
     public:

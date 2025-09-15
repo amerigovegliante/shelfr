@@ -5,7 +5,7 @@ Media::Media(const QString& title, const QString& description, const QString& ge
     description(!(description.isNull() && description.isEmpty()) ? description : "Default Description"),
     genre(!(genre.isNull() && genre.isEmpty()) ? genre : "Default Genre"),
     imagepath(!(imagepath.isNull() && imagepath.isEmpty()) ? imagepath : ":/images/default.jpg"),
-    year((year != NULL) ? year : 0) {}
+    year(year) {}
 
 Media::Media(const Media& media):
     title(media.title),

@@ -2,7 +2,7 @@
 
 Book::Book(const QString& title, const QString& description, const QString& genre, const QString& imagepath, int year, int pages, const QString& isbn, const QString& publisher, const QString& author):
     Media::Media(title,description,genre,imagepath,year),
-    pages((pages != NULL) ? pages : 0),
+    pages((pages >= 0) ? pages : 0),
     isbn((!(isbn.isNull() && isbn.isEmpty()) ? isbn : "Default-ISBN")),
     publisher(!(publisher.isNull() && publisher.isEmpty()) ? publisher : "Default-Publisher"),
     author(!(author.isNull() && author.isEmpty()) ? author : "Default Book Author")
@@ -36,3 +36,5 @@ void Book::setPages(int new_pages) { pages = new_pages; }
 void Book::setISBN(const QString& new_isbn) { isbn = new_isbn; }
 
 void Book::setPublisher(const QString& new_publisher) { publisher = new_publisher; }
+
+void Book::setAuthor(const QString& new_author) { author = new_author;}

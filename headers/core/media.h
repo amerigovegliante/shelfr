@@ -23,12 +23,14 @@ class Media
 
         virtual void accept(MediaVisitorInterface&) = 0;
 
+        
         QString getTitle() const;
         QString getDescription() const;
         QString getGenre() const;
         QString getImagePath() const;
         int getYear() const;
 
+        void setId() const;
         void setTitle(const QString&);
         void setDescription(const QString&);
         void setGenre(const QString&);

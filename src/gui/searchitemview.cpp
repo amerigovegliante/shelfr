@@ -17,7 +17,7 @@
 #include <QMessageBox>
 
 SearchItemView::SearchItemView(JsonManager* jsonManager, QWidget* parent)
-    : QWidget(parent), jsonManager(jsonManager), gridLayout(nullptr)
+    : BaseView(parent), jsonManager(jsonManager), gridLayout(nullptr)
 {
     setupUI();
     loadMediaItems();
@@ -40,7 +40,6 @@ void SearchItemView::setupUI()
     titleLabel->setObjectName("view-title");
     titleLabel->setStyleSheet("font-size: 18px; font-weight: bold;");
 
-    // Barra di ricerca
     QHBoxLayout* searchLayout = new QHBoxLayout();
     searchLayout->setSpacing(10);
     
@@ -59,7 +58,6 @@ void SearchItemView::setupUI()
     searchLayout->addWidget(searchLineEdit);
     searchLayout->addWidget(clearSearchButton);
 
-    // Scroll area con GridLayout
     scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -73,12 +71,10 @@ void SearchItemView::setupUI()
     
     scrollArea->setWidget(scrollWidget);
 
-    // Aggiungi tutto al layout principale
     mainLayout->addWidget(titleLabel);
     mainLayout->addLayout(searchLayout);
     mainLayout->addWidget(scrollArea);
 
-    // Connessioni
     connect(searchLineEdit, &QLineEdit::textChanged, this, &SearchItemView::onSearchTextChanged);
     connect(clearSearchButton, &QPushButton::clicked, this, &SearchItemView::onClearSearchClicked);
 }
@@ -86,7 +82,6 @@ void SearchItemView::setupUI()
 void SearchItemView::onDeleteMediaRequested(Media* mediaToDelete)
 {
     
-    // 🔥 VERIFICA CHE IL MEDIA SIA NELLA LISTA
     if (!allMediaList.contains(mediaToDelete)) {
         qWarning() << "Media not in allMediaList:" << mediaToDelete;
         return;
@@ -100,31 +95,25 @@ void SearchItemView::onDeleteMediaRequested(Media* mediaToDelete)
     
     if (reply == QMessageBox::No) return;
 
-    // 🔥 APPROCCIO SICURO: RIMUOVI PRIMA DAI DATI, POI DALLA UI
     try {
-        // 1. Rimuovi dalle LISTE prima di eliminare
         allMediaList.removeOne(mediaToDelete);
         mediaList.removeOne(mediaToDelete);
         visibleMediaList.removeOne(mediaToDelete);
 
-        // 2. Rimuovi la CARD dalla mappa e dal layout
         MediaCard* card = mediaCardMap.take(mediaToDelete);
         if (card) {
             disconnect(card, nullptr, this, nullptr);
             gridLayout->removeWidget(card);
-            card->deleteLater(); // 🔥 DELETE LATER è più sicuro
+            card->deleteLater(); 
         }
 
-        // 3. Elimina il MEDIA
         delete mediaToDelete;
-        mediaToDelete = nullptr; // 🔥 IMPORTANTE: imposta a nullptr
+        mediaToDelete = nullptr; 
 
-        // 4. Ricostruisci il layout
         rebuildGridLayout();
 
-        // 5. 🔥 SALVA IL JSON (approccio più sicuro)
-        jsonManager->loadFromFile(); // Ricarica i dati attuali
-        jsonManager->saveToFile();   // Risalva
+        jsonManager->loadFromFile();
+        jsonManager->saveToFile();  
 
         qDebug() << "=== DELETE SUCCESSFUL ===";
 
@@ -136,7 +125,6 @@ void SearchItemView::onDeleteMediaRequested(Media* mediaToDelete)
 
     QJsonArray newArray;
     for (Media* media : allMediaList) {
-        // Converti ogni media in JSON e aggiungi all'array
         QJsonObject json = jsonManager->convertMediaToJson(media);
         newArray.append(json);
     }
@@ -151,10 +139,8 @@ void SearchItemView::removeMediaFromLayout(Media* media)
     MediaCard* card = mediaCardMap.value(media);
     if (!card) return;
     
-    // Rimuovi la card dal layout
     gridLayout->removeWidget(card);
     
-    // Ricostruisci il layout senza buchi
     rebuildGridLayout();
 }
 
@@ -177,7 +163,6 @@ void SearchItemView::refresh()
 
 void SearchItemView::loadMediaItems()
 {
-    // Pulisci tutto prima di ricaricare
     clearLayout();
     clearMediaList();
 
@@ -205,12 +190,8 @@ void SearchItemView::loadMediaItems()
             gridLayout->addWidget(card, row, col);
             mediaCardMap[media] = card;
             
-            // Connessioni UNICHE
             connect(card, &MediaCard::deleteRequested, this, &SearchItemView::onDeleteMediaRequested, Qt::UniqueConnection);
-            connect(card, &MediaCard::editRequested, this, [this](Media* mediaToEdit) {
-                qDebug() << "Edit requested:" << mediaToEdit->getTitle();
-                // Qui gestisci l'edit
-            }, Qt::UniqueConnection);
+            connect(card, &MediaCard::editRequested,this, &SearchItemView::onCardEditRequested);
             
             connect(card, &MediaCard::clicked, this, [this](Media* clickedMedia) {
                 qDebug() << "Media clicked:" << clickedMedia->getTitle();
@@ -225,8 +206,6 @@ void SearchItemView::loadMediaItems()
     }
 }
 
-// ... (createMediaFromJson rimane uguale) ...
-
 void SearchItemView::filterMediaByTitle(const QString& searchText)
 {
     visibleMediaList.clear();
@@ -235,7 +214,7 @@ void SearchItemView::filterMediaByTitle(const QString& searchText)
         visibleMediaList = allMediaList;
     } else {
         for (Media* media : allMediaList) {
-            MediaFilterVisitor visitor(searchText); // 🔹 NUOVO visitor per ogni media
+            MediaFilterVisitor visitor(searchText);
             media->accept(visitor);
             if (visitor.matches()) {
                 visibleMediaList.append(media);
@@ -248,12 +227,10 @@ void SearchItemView::filterMediaByTitle(const QString& searchText)
 
 void SearchItemView::rebuildGridLayout()
 {
-    // Prima nascondi tutte le card
     for (MediaCard* card : mediaCardMap.values()) {
         if (card) card->hide();
     }
 
-    // Poi mostra solo quelle visibili e ricostruisci il layout
     int row = 0, col = 0;
     const int maxColumns = 3;
 
@@ -261,7 +238,7 @@ void SearchItemView::rebuildGridLayout()
         MediaCard* card = mediaCardMap.value(media);
         if (card) {
             gridLayout->addWidget(card, row, col);
-            card->show(); // 🔹 MOSTRA SOLO quelle filtrate
+            card->show();
 
             col++;
             if (col >= maxColumns) {
@@ -277,13 +254,12 @@ void SearchItemView::clearLayout()
 {
     if (!gridLayout) return;
     
-    // 🔥 DISCONNETTI TUTTE LE CONNESSIONI PRIMA
     QList<MediaCard*> cards = mediaCardMap.values();
     for (MediaCard* card : cards) {
         if (card) {
             disconnect(card, nullptr, this, nullptr);
             gridLayout->removeWidget(card);
-            card->setParent(nullptr); // Rimuovi dal layout ma NON eliminare
+            card->setParent(nullptr);
         }
     }
     
@@ -292,7 +268,6 @@ void SearchItemView::clearLayout()
 
 void SearchItemView::clearMediaList()
 {
-    // 🔥 Elimina SOLO i media, le card saranno eliminate dal clearLayout
     for (Media* media : mediaList) {
         if (media) {
             delete media;
@@ -307,5 +282,9 @@ void SearchItemView::clearMediaList()
 void SearchItemView::onViewMediaRequested(Media* media)
 {
     qDebug() << "View requested for:" << media->getTitle();
-    emit viewMediaRequested(media);  // Inoltra alla Workspace
+    emit viewMediaRequested(media);
+}
+
+void SearchItemView::onCardEditRequested(Media* media) {
+    emit editMediaRequested(media);
 }

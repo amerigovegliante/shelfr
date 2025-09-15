@@ -11,7 +11,6 @@ HEADERS += \
     headers/core/mediavisitorinterface.h \
     headers/core/music.h \
     headers/core/videogame.h \
-    headers/core/collection.h \
     headers/core/jsonmanager.h \
     headers/gui/mainwindow.h \
     headers/gui/sidebar.h \
@@ -24,7 +23,8 @@ HEADERS += \
     headers/gui/edititemview.h \
     headers/gui/viewitemview.h \
     headers/gui/mediacardvisitor.h \
-    headers/gui/mediafiltervisitor.h
+    headers/gui/mediafiltervisitor.h \
+    headers/gui/baseview.h
 
 # Sources
 SOURCES += \
@@ -35,7 +35,6 @@ SOURCES += \
     src/core/mediavisitorinterface.cpp \
     src/core/music.cpp \
     src/core/videogame.cpp \
-    src/core/collection.cpp \
     src/core/jsonmanager.cpp \
     src/gui/mainwindow.cpp \
     src/gui/sidebar.cpp \
@@ -48,7 +47,8 @@ SOURCES += \
     src/gui/edititemview.cpp \
     src/gui/viewitemview.cpp \
     src/gui/mediacardvisitor.cpp \
-    src/gui/mediafiltervisitor.cpp
+    src/gui/mediafiltervisitor.cpp \
+    src/gui/baseview.cpp
 
 # Resources
 RESOURCES += resources.qrc

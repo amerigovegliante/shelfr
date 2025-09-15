@@ -8,7 +8,7 @@
 #include <QMessageBox>
 
 AddItemView::AddItemView(JsonManager* jsonManager, QWidget* parent) 
-    : QWidget(parent), jsonManager(jsonManager) // Inizializza il puntatore
+    : BaseView(parent), jsonManager(jsonManager) // Inizializza il puntatore
 {
     setupUI();
     setupConnections();
@@ -151,7 +151,6 @@ void AddItemView::toggleFields()
     publisherEditVideogame->setVisible(false);
     playtimeEditVideogame->setVisible(false);
     
-    // Mostra solo i campi rilevanti in base al media type
     if (mediaType == "Book") {
         pagesEditBook->setVisible(true);
         isbnEditBook->setVisible(true);
@@ -221,13 +220,21 @@ void AddItemView::toggleFields()
 
 void AddItemView::onAddButtonClicked()
 {
-    // Validazione
-    if (titleEdit->text().isEmpty()) {
+    QString newTitle = titleEdit->text().trimmed();
+
+    if (newTitle.isEmpty()) {
         QMessageBox::warning(this, "Error", "Title is required!");
         return;
     }
-    
-    // SALVA il media nel JSON ← QUESTA RIGA MANCAVA!
+
+    for (const QJsonValue& value : jsonManager->getMedia()) {
+        QJsonObject obj = value.toObject();
+        if (obj["title"].toString().compare(newTitle, Qt::CaseInsensitive) == 0) {
+            QMessageBox::warning(this, "Error", "A media item with this title already exists!");
+            return;
+        }
+    }
+
     saveMediaToJson();
     
     clearForm();
@@ -242,15 +249,13 @@ void AddItemView::clearForm()
     titleEdit->clear();
     genreEdit->clear();
     
-    // Per gli QSpinBox, non usare clear() ma reimposta ai valori iniziali
-    yearEdit->setValue(0);  // Imposta a 0 per mostrare il specialValueText
+    yearEdit->setValue(0);
     pagesEditBook->setValue(0);
     durationEditMovie->setValue(0);
-    ratingEditMovie->setValue(1);  // Rating non può essere 0, quindi impostalo al minimo
+    ratingEditMovie->setValue(1);
     durationEditMusic->setValue(0);
     playtimeEditVideogame->setValue(0);
     
-    // Pulisci le QLineEdit
     isbnEditBook->clear();
     publisherEditBook->clear();
     authorEditBook->clear(); 
@@ -262,7 +267,6 @@ void AddItemView::clearForm()
     developerEditVideogame->clear();
     publisherEditVideogame->clear();
 
-    // 🔥 REIMPOSTA I SPECIAL VALUE TEXT (importante!)
     yearEdit->setSpecialValueText("Insert Year...");
     pagesEditBook->setSpecialValueText("Pages...");
     durationEditMovie->setSpecialValueText("Duration (minutes)...");
@@ -270,7 +274,6 @@ void AddItemView::clearForm()
     durationEditMusic->setSpecialValueText("Duration (minutes)...");
     playtimeEditVideogame->setSpecialValueText("Playtime (hours)...");
 
-    // Reimposta il percorso dell'immagine
     currentImagePath.clear();
     browseImageButton->setText("Select Image...");
 
@@ -288,10 +291,9 @@ void AddItemView::onBrowseImageClicked()
 
     if(!imagePath.isEmpty())
     {
-        currentImagePath = imagePath;  // Salva il percorso assoluto
+        currentImagePath = imagePath;
         qDebug() << "Selected image:" << currentImagePath;
         
-        // Opzionale: cambia il testo del bottone per mostrare il filename
         QFileInfo fileInfo(imagePath);
         browseImageButton->setText(fileInfo.fileName());
     }
@@ -302,14 +304,12 @@ void AddItemView::saveMediaToJson()
     QString mediaType = mediaTypeCombo->currentText();
     QMap<QString, QVariant> data;
     
-    // Campi comuni a tutti i media
     data["title"] = titleEdit->text();
     data["year"] = yearEdit->value();
     data["description"] = descriptionEdit->toPlainText();
     data["genre"] = genreEdit->text();
     data["imagePath"] = currentImagePath;
 
-    // Campi specifici per tipo di media
     if (mediaType == "Book") {
         data["author"] = authorEditBook->text();
         data["pages"] = pagesEditBook->value();
@@ -336,7 +336,7 @@ void AddItemView::saveMediaToJson()
     }
     
     QJsonObject mediaJson = JsonManager::mediaToJson(mediaType, data);
-    jsonManager->addMedia(mediaJson); // Usa il puntatore
+    jsonManager->addMedia(mediaJson);
     
     qDebug() << "JSON saved successfully!";
     qDebug() << "Current items in shared manager:" << jsonManager->getMedia().size();

@@ -10,15 +10,15 @@
 #include <QGridLayout>
 
 #include "../core/jsonmanager.h"
+#include "baseview.h"
 #include "viewitemview.h"
 
-// Forward declarations
-class Media;
-class MediaCard;
-class MediaCardVisitor;
-class MediaFilterVisitor;
+#include "../core/media.h"
+#include "mediacard.h"
+#include "mediacardvisitor.h"
+#include "mediafiltervisitor.h"
 
-class SearchItemView : public QWidget
+class SearchItemView : public BaseView
 {
     Q_OBJECT
 
@@ -29,25 +29,27 @@ public:
     void refresh();
 
 signals:
-    void mediaDeleted(); // Segnale per notificare la delete
+    void mediaDeleted();
     void viewMediaRequested(Media* media);
+    void editMediaRequested(Media* media);
 
 private slots:
     void onSearchTextChanged(const QString& text);
     void onClearSearchClicked();
-    void onDeleteMediaRequested(Media* mediaToDelete); // Slot per la delete
+    void onDeleteMediaRequested(Media* mediaToDelete);
     void onViewMediaRequested(Media* media);
+    void onCardEditRequested(Media* media);
 
 private:
     
-    void setupUI();
+    void setupUI() override;
     void loadMediaItems();
     void filterMediaByTitle(const QString& searchText);
     void clearLayout();
     void clearMediaList();
     Media* createMediaFromJson(const QJsonObject& mediaObj);
     void rebuildGridLayout();
-    void removeMediaFromLayout(Media* media); // Rimuove un media specifico
+    void removeMediaFromLayout(Media* media);
 
     JsonManager* jsonManager;
     QScrollArea* scrollArea;
@@ -58,10 +60,8 @@ private:
     QList<Media*> allMediaList;
     QList<Media*> visibleMediaList;
 
-    // Mappa per accesso rapido alle card
     QHash<Media*, MediaCard*> mediaCardMap;
 
-    // Widgets per la ricerca
     QLineEdit* searchLineEdit;
     QPushButton* clearSearchButton;
 };

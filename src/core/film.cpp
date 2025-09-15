@@ -2,8 +2,8 @@
 
 Film::Film(const QString& title, const QString& description, const QString& genre, const QString& imagepath, int year, int duration, int rating, const QString& studio, const QString& director):
     Media(title,description,genre,imagepath,year),
-    duration((duration != NULL && duration > 0) ? duration : 0),
-    rating((rating != NULL && rating >= 1 && rating <= 5) ? rating : 0), // default case managed as "rating not found"
+    duration((duration >= 0) ? duration : 0),
+    rating((rating >= 1 && rating <= 5) ? rating : 0), // default case managed as "rating not found"
     studio(!(studio.isNull() && studio.isEmpty()) ? studio : "Default Studio"),
     director(!(director.isNull() && director.isEmpty()) ? director : "Default Film Director")
 {}

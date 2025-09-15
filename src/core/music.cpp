@@ -3,7 +3,8 @@
 Music::Music(const QString& title, const QString& description, const QString& genre, const QString& imagepath, int year, const QString& format, const QString& label, int duration):
     Media(title,description,genre,imagepath,year),
     format(!(format.isNull() && format.isEmpty()) ? format : "Default Music Format"),
-    label(!(label.isNull() && label.isEmpty()) ? label : "Default Music Label") 
+    label(!(label.isNull() && label.isEmpty()) ? label : "Default Music Label") ,
+    duration((duration >= 0) ? duration : 0)
 {}
 
 Music::Music(const Music& music):

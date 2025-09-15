@@ -23,10 +23,10 @@ class Book : public Media
         QString getPublisher() const;
         QString getAuthor() const;
 
+        void setAuthor(const QString&);
         void setPages(int);
         void setISBN(const QString&);
         void setPublisher(const QString&);
-        void setAuthor(const QString&);
 };
 
 #endif

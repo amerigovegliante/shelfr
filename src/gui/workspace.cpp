@@ -11,25 +11,18 @@ Workspace::Workspace(QWidget* parent) : QFrame(parent)
     stackedWidget = new QStackedWidget(this);
     layout->addWidget(stackedWidget);
 
-    // Crea le view
     defaultView = new DefaultView(this);
     addItemView = new AddItemView(jsonManager, this);
     searchItemView = new SearchItemView(jsonManager, this);
     viewItemView = new ViewItemView(this);
+    editItemView = new EditItemView(jsonManager,this);
 
-    // 🔥 AGGIUNGI LE VIEW NELL'ORDINE CORRETTO
-    stackedWidget->addWidget(defaultView);      // Indice 0
-    stackedWidget->addWidget(addItemView);      // Indice 1  
-    stackedWidget->addWidget(searchItemView);   // Indice 2
-    stackedWidget->addWidget(viewItemView);     // Indice 3
+    stackedWidget->addWidget(defaultView);      
+    stackedWidget->addWidget(addItemView);      
+    stackedWidget->addWidget(searchItemView);  
+    stackedWidget->addWidget(viewItemView);    
+    stackedWidget->addWidget(editItemView);
 
-    // 🔥 RIMUOVI QUESTE LINEE - LE VIEW HANNO GIÀ IL LORO LAYOUT
-    // defaultView->setLayout(new QVBoxLayout());
-    // addItemView->setLayout(new QVBoxLayout());
-    // searchItemView->setLayout(new QVBoxLayout());
-    // searchItemView->layout()->addWidget(new QLabel("This is the Search View", searchItemView));
-
-    // Connessioni
     connect(jsonManager, &JsonManager::mediaDataChanged, this, [this]() {
         qDebug() << "Media data changed, refreshing search view...";
         searchItemView->refresh();
@@ -48,12 +41,29 @@ Workspace::Workspace(QWidget* parent) : QFrame(parent)
     connect(searchItemView, &SearchItemView::viewMediaRequested, this, &Workspace::onViewMediaRequested);
     connect(viewItemView, &ViewItemView::backRequested, this, &Workspace::onBackFromViewRequested);
 
+    connect(searchItemView, &SearchItemView::editMediaRequested,this, &Workspace::onEditMediaRequested);
+
+    connect(editItemView, &EditItemView::mediaUpdated, this, [this](Media* updated) {
+    if (updated) {
+        jsonManager->updateMedia(updated);
+        jsonManager->saveToFile();
+        searchItemView->refresh();  
+        showSearchItemView();       
+    }
+});
+
+
     showDefaultView();
+}
+
+void Workspace::onEditMediaRequested(Media* media) {
+    editItemView->setMedia(media);
+    stackedWidget->setCurrentWidget(editItemView);
 }
 
 void Workspace::showDefaultView()
 {
-    stackedWidget->setCurrentWidget(defaultView); // 🔥 USA setCurrentWidget invece degli indici
+    stackedWidget->setCurrentWidget(defaultView); 
     qDebug() << "Show Default View!";
 }
 
@@ -69,7 +79,7 @@ void Workspace::showSearchItemView()
     qDebug() << "Show Search Item View!";
 }
 
-void Workspace::showViewItemView() // 🔥 AGGIUNGI QUESTO METODO
+void Workspace::showViewItemView()
 {
     stackedWidget->setCurrentWidget(viewItemView);
     qDebug() << "Show View Item View!";
@@ -78,13 +88,12 @@ void Workspace::showViewItemView() // 🔥 AGGIUNGI QUESTO METODO
 void Workspace::onViewMediaRequested(Media* media)
 {
     viewItemView->setMedia(media);
-    stackedWidget->setCurrentWidget(viewItemView); // 🔥 USA setCurrentWidget
+    stackedWidget->setCurrentWidget(viewItemView); 
     qDebug() << "Showing detailed view for:" << media->getTitle();
 }
 
 void Workspace::onBackFromViewRequested()
 {
-    // 🔥 TORNA ALLA VIEW CORRETTA (searchItemView invece di indice fisso)
     stackedWidget->setCurrentWidget(searchItemView);
     viewItemView->clear();
     qDebug() << "Back to search view";

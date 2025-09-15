@@ -5,6 +5,8 @@
 #include "additemview.h"
 #include "searchitemview.h"
 #include "viewitemview.h"
+#include "edititemview.h"
+
 #include <QFrame>
 #include <QStackedWidget>
 #include <QVBoxLayout>
@@ -25,6 +27,7 @@ class Workspace: public QFrame
     private slots:
         void onViewMediaRequested(Media* media);
         void onBackFromViewRequested();
+        void onEditMediaRequested(Media* media);
 
     private:
         QStackedWidget* stackedWidget;
@@ -34,6 +37,7 @@ class Workspace: public QFrame
         AddItemView* addItemView;
         SearchItemView* searchItemView;
         ViewItemView* viewItemView;
+        EditItemView* editItemView;
 
         JsonManager* jsonManager;
 };

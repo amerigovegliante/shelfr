@@ -13,9 +13,24 @@
 #include "../../headers/core/music.h"
 #include "../../headers/core/videogame.h"
 
+void JsonManager::updateMedia(Media* media)
+{
+    if (!media) return;
+
+    for (int i = 0; i < mediaArray.size(); ++i) {
+        QJsonObject obj = mediaArray[i].toObject();
+
+        if (obj["title"].toString().toStdString() == media->getTitle()) {
+            QJsonObject updatedObj = convertMediaToJson(media);
+            mediaArray[i] = updatedObj;
+            break;
+        }
+    }
+}
+
+
 JsonManager::JsonManager(QObject* parent) : QObject(parent), fileName("media.json")
 {
-    // Usa la directory dell'eseguibile (cartella di build)
     QString appDir = QCoreApplication::applicationDirPath();
     fileName = QDir(appDir).filePath("media.json");
     
@@ -26,13 +41,9 @@ JsonManager::JsonManager(QObject* parent) : QObject(parent), fileName("media.jso
 bool JsonManager::loadFromFile()
 {
     QFile file(fileName);
-    
-    // Se il file non esiste, crea un array vuoto
     if (!file.exists()) {
         qDebug() << "File doesn't exist, creating new array";
         mediaArray = QJsonArray();
-        
-        // Salva array vuoto per creare il file
         return saveToFile();
     }
     
@@ -68,7 +79,6 @@ bool JsonManager::loadFromFile()
 
 bool JsonManager::saveToFile() const
 {
-    // Assicurati che la directory esista
     QFileInfo fileInfo(fileName);
     QDir dir = fileInfo.dir();
     if (!dir.exists()) {
@@ -99,7 +109,7 @@ void JsonManager::addMedia(const QJsonObject &mediaObject)
     bool success = saveToFile();
 
     if (success) {
-        emit mediaDataChanged();  // EMETTI IL SEGNALE QUI
+        emit mediaDataChanged();
     }
 
     qDebug() << "Add media - Success:" << success;
@@ -117,7 +127,7 @@ bool JsonManager::removeMedia(int index)
         mediaArray.removeAt(index);
         bool success = saveToFile();
         if (success) {
-            emit mediaDataChanged();  // Emetti il segnale anche per la rimozione
+            emit mediaDataChanged();
         }
         return success;
     }
@@ -211,7 +221,7 @@ Media* JsonManager::createMediaFromJson(const QJsonObject& mediaObj)
             mediaObj["genre"].toString(),
             mediaObj["imagePath"].toString(),
             mediaObj["year"].toInt(),
-            mediaObj["pages"].toInt(), // Assicurati che il campo sia "pages" non "pageCount"
+            mediaObj["pages"].toInt(),
             mediaObj["isbn"].toString(),
             mediaObj["publisher"].toString(),
             mediaObj["author"].toString()

@@ -2,12 +2,11 @@
 #define SIDEBAR_H
 
 #include <QFrame>
-
-class QVBoxLayout;
-class QHBoxLayout;
-class QPushButton;
-class QCheckBox;
-class QLabel;
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QLabel>
 
 class Sidebar : public QFrame
 {

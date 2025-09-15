@@ -5,7 +5,7 @@ Videogame::Videogame(const QString& title, const QString& description, const QSt
     platform(!(platform.isNull() && platform.isEmpty()) ? platform : "Default Videogame Platform"),
     developer(!(developer.isNull() && developer.isEmpty()) ? developer : "Default Developer"),
     publisher(!(publisher.isNull() && publisher.isEmpty()) ? publisher : "Default Videogame Publisher"),
-    playtime((playtime > 0) ? playtime : 0)
+    playtime((playTime > 0) ? playTime : 0)
 {}
 
 Videogame::Videogame(const Videogame& videogame):

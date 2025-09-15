@@ -7,13 +7,13 @@
 #include <QMap>
 #include <QVariant>
 #include <QDateTime>
-#include <QObject>  // Aggiungi questo
+#include <QObject>
 
 #include "media.h"
 
-class JsonManager : public QObject  // eredita da QObject
+class JsonManager : public QObject
 {
-    Q_OBJECT  // Aggiungi questa macro
+    Q_OBJECT
 
 public:
         JsonManager(QObject* parent = nullptr);
@@ -29,13 +29,15 @@ public:
         QJsonArray getMedia() const;
         bool removeMedia(int);
 
+        void updateMedia(Media* media);
+
         static QJsonObject mediaToJson(const QString&, const QMap<QString, QVariant>&);
         
         void setFileName(const QString &newFileName);
         QString getFileName() const;
 
-signals:  // Aggiungi questa sezione
-    void mediaDataChanged();  // Segnale quando i dati cambiano
+signals: 
+    void mediaDataChanged();
 
 private:
         QString fileName;

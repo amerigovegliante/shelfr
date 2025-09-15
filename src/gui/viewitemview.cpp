@@ -7,7 +7,7 @@
 #include <QFile>
 
 ViewItemView::ViewItemView(QWidget* parent) 
-    : QWidget(parent), currentMedia(nullptr)
+    : BaseView(parent), currentMedia(nullptr)
 {
     setupUI();
 }
@@ -32,7 +32,7 @@ void ViewItemView::setupUI()
     headerLayout->addStretch();
     headerLayout->addWidget(titleLabel);
     headerLayout->addStretch();
-    headerLayout->addWidget(new QLabel("")); // Spazio vuoto per bilanciare
+    headerLayout->addWidget(new QLabel("")); 
 
     // Content area
     contentLayout = new QHBoxLayout();
@@ -48,7 +48,6 @@ void ViewItemView::setupUI()
     leftLayout->addWidget(imageLabel);
     leftLayout->addStretch();
 
-    // Right side - Details
     QVBoxLayout* rightLayout = new QVBoxLayout();
     
     typeLabel = new QLabel(this);
@@ -77,11 +76,9 @@ void ViewItemView::setupUI()
     contentLayout->addLayout(leftLayout);
     contentLayout->addLayout(rightLayout);
 
-    // Assembla tutto
     mainLayout->addLayout(headerLayout);
     mainLayout->addLayout(contentLayout);
 
-    // Connessioni
     connect(backButton, &QPushButton::clicked, this, &ViewItemView::backRequested);
 }
 
@@ -125,7 +122,6 @@ void ViewItemView::updateView()
         imageLabel->setPixmap(QPixmap(":/images/default_media.png").scaled(300, 300));
     }
 
-    // Dettagli specifici
     detailsEdit->setText(formatMediaDetails(currentMedia));
 }
 

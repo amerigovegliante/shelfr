@@ -6,7 +6,7 @@
 #include "../../headers/core/videogame.h"
 
 MediaCardVisitor::MediaCardVisitor(QWidget* parent) 
-    : parentWidget(parent), currentCard(nullptr) 
+    : currentCard(nullptr) , parentWidget(parent)
 {
 }
 
@@ -16,7 +16,6 @@ MediaCard* MediaCardVisitor::getCard() const {
 
 void MediaCardVisitor::visit(Book& book) {
     currentCard = new MediaCard(&book, parentWidget);
-    // Puoi customizzare la card per i libri se necessario
 }
 
 void MediaCardVisitor::visit(Film& film) {

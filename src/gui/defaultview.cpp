@@ -2,7 +2,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 
-DefaultView::DefaultView(QWidget *parent) : QWidget(parent)
+DefaultView::DefaultView(QWidget *parent) : BaseView(parent)
 {
     setupUI();
 }

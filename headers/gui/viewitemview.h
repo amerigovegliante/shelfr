@@ -8,8 +8,9 @@
 #include <QTextEdit>
 #include <QScrollArea>
 #include "../../headers/core/media.h"
+#include "baseview.h"
 
-class ViewItemView : public QWidget
+class ViewItemView : public BaseView
 {
     Q_OBJECT
 
@@ -22,13 +23,12 @@ signals:
     void backRequested();
 
 private:
-    void setupUI();
+    void setupUI() override;
     void updateView();
     QString formatMediaDetails(Media* media);
 
     Media* currentMedia;
     
-    // Widgets
     QLabel* titleLabel;
     QLabel* typeLabel;
     QLabel* yearLabel;
@@ -38,7 +38,6 @@ private:
     QTextEdit* detailsEdit;
     QPushButton* backButton;
     
-    // Layouts
     QVBoxLayout* mainLayout;
     QHBoxLayout* headerLayout;
     QHBoxLayout* contentLayout;

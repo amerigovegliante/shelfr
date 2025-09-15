@@ -11,10 +11,10 @@
 #include <QString>
 #include <QSpinBox>
 
-// Forward declaration per evitare inclusioni circolari
 #include "../../headers/core/jsonmanager.h"
+#include "baseview.h"
 
-class AddItemView : public QWidget
+class AddItemView : public BaseView
 {
     Q_OBJECT
 
@@ -31,7 +31,7 @@ private slots:
     void onBrowseImageClicked();
 
 private:
-    void setupUI();
+    void setupUI() override;
     void setupConnections();
     void toggleFields();
     void saveMediaToJson();

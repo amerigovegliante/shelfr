@@ -6,7 +6,6 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     
-    // Imposta il tema iniziale
     ThemeManager::instance().setTheme(ThemeManager::Dark);
     
     MainWindow mainWindow;
