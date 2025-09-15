@@ -32,7 +32,6 @@ SOURCES += \
     src/core/book.cpp \
     src/core/film.cpp \
     src/core/media.cpp \
-    src/core/mediavisitorinterface.cpp \
     src/core/music.cpp \
     src/core/videogame.cpp \
     src/core/jsonmanager.cpp \

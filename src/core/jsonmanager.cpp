@@ -19,7 +19,7 @@ void JsonManager::updateMedia(Media* media)
     for (int i = 0; i < mediaArray.size(); ++i) {
         QJsonObject obj = mediaArray[i].toObject();
 
-        if (obj["title"].toString().toStdString() == media->getTitle()) {
+        if (obj["title"].toString().toStdString() == media->getTitle().toStdString()) {
             QJsonObject updatedObj = convertMediaToJson(media);
             mediaArray[i] = updatedObj;
             break;
