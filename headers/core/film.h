@@ -19,6 +19,8 @@ class Film : public Media
         virtual ~Film() override = default;
         Film* clone() const override;
 
+        virtual QString getType() const override;
+
         int getDuration() const;
         int getRating() const;
         QString getStudio() const;

@@ -1,12 +1,12 @@
 QMainWindow {
-    background-color: #f5f5f5;
+    background-color: #E6E6E6; /* sfondo leggermente grigio */
 }
 
 QFrame#sidebar {
     margin: 10px;
-    margin-right: 5px !impor;
-    background-color: #e0e0e0;
-    border-right: 1px solid #ccc;
+    margin-right: 5px !important;
+    background-color: #D9D9D9; /* grigio chiaro più caldo */
+    border-right: 1px solid #BBB;
     border: 2px solid black;
     border-radius: 10px;
 }
@@ -16,10 +16,11 @@ QFrame#workspace {
     margin-left: 10px !important;
     border: 2px solid black;
     border-radius: 10px;
+    background-color: #F5F5F5; /* bianco sporco, più morbido */
 }
 
 QLabel#title {
-    color: #2196F3;
+    color: #333333; /* testo scuro ma non nero pieno */
     font-size: 24px;
     font-weight: bold;
     padding: 10px;
@@ -27,50 +28,84 @@ QLabel#title {
 }
 
 QLabel#theme-label {
-    color: #000000;
+    color: #333333;
     font-size: 14px;
     font-weight: bold;
 }
 
 QPushButton {
-    background-color: #2196F3;
-    color: white;
+    background-color: #C8D0C8; /* verde/grigio tenue */
+    color: #222222;
     border: none;
     padding: 12px;
     border-radius: 4px;
     text-align: left;
+    border: 2px solid #999999;
 }
 
 QPushButton:hover {
-    background-color: #1976D2;
+    background-color: #B0B8B0;
 }
 
 QPushButton:pressed {
-    background-color: #1565C0;
+    background-color: #A0A8A0;
 }
 
 QCheckBox {
     spacing: 8px;
-    color: #000000;
+    color: #222222;
 }
 
 QCheckBox::indicator {
     width: 40px;
     height: 20px;
     border-radius: 10px;
-    background: #cccccc;
-    border: 1px solid #999999;
+    background: #C8D0C8;
+    border: 1px solid #888888;
 }
 
 QCheckBox::indicator:checked {
-    background: #2196F3;
-    border: 1px solid #1976D2;
+    background: #A0B0A0;
+    border: 1px solid #666666;
 }
 
 QCheckBox::indicator:unchecked:hover {
-    background: #bbbbbb;
+    background: #D0D8D0;
 }
 
 QCheckBox::indicator:checked:hover {
-    background: #1976D2;
+    background: #90A090;
+}
+
+#media-card {
+    background-color: #E0E0E0; /* grigio chiaro morbido */
+    border: 2px solid #999999;
+    border-radius: 10px;
+}
+
+#scroll-area {
+    background-color: #F0F0F0; /* leggermente grigio */
+    border: 2px solid #999999;
+    border-radius: 10px;
+}
+
+#scroll-widget {
+    background-color: #E8E8E8;
+    border: 2px solid #999999;
+}
+
+#media-details {
+    background-color: #F5F5F5;
+    border: 2px solid black;
+}
+
+#media-description {
+    background-color: #F5F5F5;
+    border: 2px solid black;
+}
+
+#view-title
+{
+    font-weight: bold;
+    font-size: 18px;
 }

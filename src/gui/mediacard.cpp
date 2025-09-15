@@ -4,7 +4,6 @@
 #include <QFile>
 #include <QMenu>
 #include <QMouseEvent>
-#include <QDebug>
 
 MediaCard::MediaCard(Media* media, QWidget* parent): QFrame(parent), media(media)
 {
@@ -59,9 +58,7 @@ void MediaCard::updateCard()
 
     if (!media->getImagePath().isEmpty() && QFile::exists(media->getImagePath())) {
         QPixmap pixmap(media->getImagePath());
-        imageLabel->setPixmap(pixmap.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    } else {
-        imageLabel->setPixmap(QPixmap(":/images/default_media.png").scaled(200, 200));
+        imageLabel->setPixmap(pixmap.scaled(imageLabel->width(), imageLabel->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 
     titleLabel->setText(media->getTitle());
@@ -127,21 +124,16 @@ void MediaCard::setupButtons()
     deleteButton->setObjectName("media-delete-button");
 
     connect(editButton, &QPushButton::clicked, this, [this]() {
-        qDebug() << "Edit button clicked for:" << media->getTitle();
         emit editRequested(media);
     });
 
     connect(deleteButton, &QPushButton::clicked, this, [this]() {
-        qDebug() << "=== DELETE BUTTON CLICKED ===";
-        qDebug() << "Media:" << media->getTitle();
         emit deleteRequested(media);
     });
 
     buttonLayout->addWidget(editButton, 1);
     buttonLayout->addWidget(deleteButton, 1);
     buttonLayout->addStretch();
-
-    qDebug() << "MediaCard buttons created for:" << media->getTitle();
 }
 
 MediaCard::~MediaCard() {}

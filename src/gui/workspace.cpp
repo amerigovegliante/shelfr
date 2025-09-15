@@ -24,17 +24,14 @@ Workspace::Workspace(QWidget* parent) : QFrame(parent)
     stackedWidget->addWidget(editItemView);
 
     connect(jsonManager, &JsonManager::mediaDataChanged, this, [this]() {
-        qDebug() << "Media data changed, refreshing search view...";
         searchItemView->refresh();
     });
     
     connect(addItemView, &AddItemView::itemAdded, this, [this]() {
-        qDebug() << "Item added, refreshing search view...";
         searchItemView->refresh();
     });
     
     connect(searchItemView, &SearchItemView::mediaDeleted, this, [this]() {
-        qDebug() << "Media deleted, refreshing search view...";
         searchItemView->refresh();
     });
 
@@ -64,37 +61,31 @@ void Workspace::onEditMediaRequested(Media* media) {
 void Workspace::showDefaultView()
 {
     stackedWidget->setCurrentWidget(defaultView); 
-    qDebug() << "Show Default View!";
 }
 
 void Workspace::showAddItemView()
 {
     stackedWidget->setCurrentWidget(addItemView);
-    qDebug() << "Show Add Item View!";
 }
 
 void Workspace::showSearchItemView()
 {
     stackedWidget->setCurrentWidget(searchItemView);
-    qDebug() << "Show Search Item View!";
 }
 
 void Workspace::showViewItemView()
 {
     stackedWidget->setCurrentWidget(viewItemView);
-    qDebug() << "Show View Item View!";
 }
 
 void Workspace::onViewMediaRequested(Media* media)
 {
     viewItemView->setMedia(media);
     stackedWidget->setCurrentWidget(viewItemView); 
-    qDebug() << "Showing detailed view for:" << media->getTitle();
 }
 
 void Workspace::onBackFromViewRequested()
 {
     stackedWidget->setCurrentWidget(searchItemView);
     viewItemView->clear();
-    qDebug() << "Back to search view";
 }

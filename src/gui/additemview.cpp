@@ -2,7 +2,6 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QFormLayout>
-#include <QDebug>
 #include <QStandardPaths>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -223,7 +222,6 @@ void AddItemView::onAddButtonClicked()
     QString newTitle = titleEdit->text().trimmed();
 
     if (newTitle.isEmpty()) {
-        QMessageBox::warning(this, "Error", "Title is required!");
         return;
     }
 
@@ -292,10 +290,11 @@ void AddItemView::onBrowseImageClicked()
     if(!imagePath.isEmpty())
     {
         currentImagePath = imagePath;
-        qDebug() << "Selected image:" << currentImagePath;
         
         QFileInfo fileInfo(imagePath);
         browseImageButton->setText(fileInfo.fileName());
+    } else {
+        currentImagePath = "defaultimagepath";
     }
 }
 
@@ -337,7 +336,4 @@ void AddItemView::saveMediaToJson()
     
     QJsonObject mediaJson = JsonManager::mediaToJson(mediaType, data);
     jsonManager->addMedia(mediaJson);
-    
-    qDebug() << "JSON saved successfully!";
-    qDebug() << "Current items in shared manager:" << jsonManager->getMedia().size();
 }

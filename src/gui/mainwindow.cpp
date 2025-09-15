@@ -2,7 +2,6 @@
 #include "../../headers/gui/workspace.h"
 
 #include <QHBoxLayout>
-#include <QDebug>
 #include <QSplitter>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -33,19 +32,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     setCentralWidget(mainSplitter);
 
-    qDebug() << "MainWindow created";
 }
 
 MainWindow::~MainWindow(){}
 
 void MainWindow::onAddItemClicked()
 {
-    qDebug() << "add item clicked";
     workspace->showAddItemView();
 }
 
 void MainWindow::onSearchItemClicked()
 {
-    qDebug() << "search item clicked";
     workspace->showSearchItemView();
 }

@@ -17,6 +17,8 @@ class Music: public Media
         virtual ~Music() override = default;
         Music* clone() const override;
 
+        virtual QString getType() const override;
+
         QString getFormat() const;
         QString getLabel() const;
         int getDuration() const;

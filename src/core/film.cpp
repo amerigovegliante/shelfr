@@ -21,6 +21,8 @@ void Film::accept(MediaVisitorInterface& visitor)
     visitor.visit(*this);
 }
 
+QString Film::getType() const { return "Film";}
+
 Film* Film::clone() const { return new Film(*this); }
 
 int Film::getDuration() const {return Film::duration; }

@@ -38,7 +38,6 @@ void SearchItemView::setupUI()
     QLabel* titleLabel = new QLabel("Search Media Items", this);
     titleLabel->setAlignment(Qt::AlignCenter);
     titleLabel->setObjectName("view-title");
-    titleLabel->setStyleSheet("font-size: 18px; font-weight: bold;");
 
     QHBoxLayout* searchLayout = new QHBoxLayout();
     searchLayout->setSpacing(10);
@@ -59,11 +58,14 @@ void SearchItemView::setupUI()
     searchLayout->addWidget(clearSearchButton);
 
     scrollArea = new QScrollArea(this);
+    scrollArea->setObjectName("scroll-area");
     scrollArea->setWidgetResizable(true);
     scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     
     scrollWidget = new QWidget();
+    scrollWidget->setObjectName("scroll-widget");
+
     gridLayout = new QGridLayout(scrollWidget);
     gridLayout->setSpacing(20);
     gridLayout->setContentsMargins(15, 15, 15, 15);
@@ -104,7 +106,7 @@ void SearchItemView::onDeleteMediaRequested(Media* mediaToDelete)
         if (card) {
             disconnect(card, nullptr, this, nullptr);
             gridLayout->removeWidget(card);
-            card->deleteLater(); 
+            card->setParent(nullptr);
         }
 
         delete mediaToDelete;
@@ -157,7 +159,6 @@ void SearchItemView::onClearSearchClicked()
 
 void SearchItemView::refresh()
 {
-    qDebug() << "Refreshing SearchItemView...";
     loadMediaItems();
 }
 
@@ -259,7 +260,7 @@ void SearchItemView::clearLayout()
         if (card) {
             disconnect(card, nullptr, this, nullptr);
             gridLayout->removeWidget(card);
-            card->setParent(nullptr);
+            card->deleteLater();
         }
     }
     
@@ -281,7 +282,6 @@ void SearchItemView::clearMediaList()
 
 void SearchItemView::onViewMediaRequested(Media* media)
 {
-    qDebug() << "View requested for:" << media->getTitle();
     emit viewMediaRequested(media);
 }
 

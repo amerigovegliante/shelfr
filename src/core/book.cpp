@@ -16,6 +16,8 @@ Book::Book(const Book& book):
     author(book.author)
 {}
 
+QString Book::getType() const { return "Book";}
+
 void Book::accept(MediaVisitorInterface& visitor)
 {
     visitor.visit(*this);

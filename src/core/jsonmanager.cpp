@@ -2,7 +2,6 @@
 
 #include <QFile>
 #include <QJsonDocument>
-#include <QDebug>
 #include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
@@ -34,7 +33,6 @@ JsonManager::JsonManager(QObject* parent) : QObject(parent), fileName("media.jso
     QString appDir = QCoreApplication::applicationDirPath();
     fileName = QDir(appDir).filePath("media.json");
     
-    qDebug() << "JSON file location:" << fileName;
     loadFromFile();
 }
 
@@ -42,14 +40,11 @@ bool JsonManager::loadFromFile()
 {
     QFile file(fileName);
     if (!file.exists()) {
-        qDebug() << "File doesn't exist, creating new array";
         mediaArray = QJsonArray();
         return saveToFile();
     }
     
     if (!file.open(QIODevice::ReadOnly)) {
-        qWarning() << "Could not open file for reading:" << fileName;
-        qWarning() << "Error:" << file.errorString();
         mediaArray = QJsonArray();
         return false;
     }
@@ -61,16 +56,13 @@ bool JsonManager::loadFromFile()
     QJsonDocument doc = QJsonDocument::fromJson(data, &error);
     
     if (error.error != QJsonParseError::NoError) {
-        qWarning() << "JSON parse error:" << error.errorString();
         mediaArray = QJsonArray();
         return false;
     }
     
     if (doc.isArray()) {
         mediaArray = doc.array();
-        qDebug() << "Loaded" << mediaArray.size() << "media items from" << fileName;
     } else {
-        qWarning() << "JSON document is not an array, creating empty array";
         mediaArray = QJsonArray();
     }
     
@@ -83,7 +75,6 @@ bool JsonManager::saveToFile() const
     QDir dir = fileInfo.dir();
     if (!dir.exists()) {
         if (!dir.mkpath(".")) {
-            qWarning() << "Failed to create directory:" << dir.path();
             return false;
         }
     }
@@ -91,8 +82,6 @@ bool JsonManager::saveToFile() const
     QFile file(fileName);
     
     if (!file.open(QIODevice::WriteOnly)) {
-        qWarning() << "Could not open file for writing:" << fileName;
-        qWarning() << "Error:" << file.errorString();
         return false;
     }
     
@@ -111,9 +100,6 @@ void JsonManager::addMedia(const QJsonObject &mediaObject)
     if (success) {
         emit mediaDataChanged();
     }
-
-    qDebug() << "Add media - Success:" << success;
-    qDebug() << "Current array size:" << mediaArray.size();
 }
 
 QJsonArray JsonManager::getMedia() const
@@ -170,14 +156,12 @@ QJsonObject JsonManager::convertMediaToJson(Media* media)
     
     QMap<QString, QVariant> data;
     
-    // Campi comuni a tutti i media
     data["title"] = media->getTitle();
     data["year"] = media->getYear();
     data["description"] = media->getDescription();
     data["genre"] = media->getGenre();
     data["imagePath"] = media->getImagePath();
     
-    // Campi specifici per tipo
     if (Book* book = dynamic_cast<Book*>(media)) {
         data["author"] = book->getAuthor();
         data["pages"] = book->getPages();
@@ -264,10 +248,6 @@ Media* JsonManager::createMediaFromJson(const QJsonObject& mediaObj)
             mediaObj["publisher"].toString(),
             mediaObj["playtime"].toInt()
         );
-    }
-    
-    if (!media) {
-        qWarning() << "Unknown media type:" << type;
     }
     
     return media;

@@ -18,6 +18,8 @@ class Book : public Media
         virtual ~Book() override = default;
         Book* clone() const override;
 
+        virtual QString getType() const override;
+
         int getPages() const;
         QString getISBN() const;
         QString getPublisher() const;

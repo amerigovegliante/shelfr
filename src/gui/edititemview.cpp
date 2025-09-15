@@ -3,20 +3,18 @@
 #include "../../headers/core/film.h"
 #include "../../headers/core/music.h"
 #include "../../headers/core/videogame.h"
-
 #include <QVBoxLayout>
 #include <QFormLayout>
-#include <QDebug>
 #include <QFileDialog>
 #include <QStandardPaths>
 
-EditItemView::EditItemView(JsonManager* jsonManager, QWidget *parent)
-    : BaseView(parent), media(nullptr), jsonManager(jsonManager)
+EditItemView::EditItemView(JsonManager* jsonManager, QWidget *parent) 
+    : BaseView(parent), media(nullptr), jsonManager(jsonManager) 
 {
     setupUI();
 }
 
-void EditItemView::setupUI()
+void EditItemView::setupUI() 
 {
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
 
@@ -27,7 +25,6 @@ void EditItemView::setupUI()
     formLayout = new QFormLayout();
     formLayout->setSpacing(10);
 
-    // campi base
     titleEdit = new QLineEdit(this);
     titleEdit->setEnabled(false);
     genreEdit = new QLineEdit(this);
@@ -56,10 +53,9 @@ void EditItemView::setupUI()
 
     connect(addButton, &QPushButton::clicked, this, &EditItemView::onSaveChanges);
     connect(browseImageButton, &QPushButton::clicked, this, &EditItemView::onBrowseImageClicked);
-
 }
 
-void EditItemView::onBrowseImageClicked()
+void EditItemView::onBrowseImageClicked() 
 {
     QString imagePath = QFileDialog::getOpenFileName(
         this,
@@ -68,7 +64,8 @@ void EditItemView::onBrowseImageClicked()
         "Image Files (*.png *.jpg *.jpeg *.bmp *.gif);;All Files (*)"
     );
 
-    if (!imagePath.isEmpty()) {
+    if (!imagePath.isEmpty()) 
+    {
         currentImagePath = imagePath;
         qDebug() << "Selected image:" << currentImagePath;
 
@@ -77,8 +74,7 @@ void EditItemView::onBrowseImageClicked()
     }
 }
 
-
-void EditItemView::onSaveChanges()
+void EditItemView::onSaveChanges() 
 {
     if (!media) return;
 
@@ -88,42 +84,42 @@ void EditItemView::onSaveChanges()
     media->setDescription(descriptionEdit->toPlainText());
     media->setImagePath(currentImagePath);
 
-    if (Book* b = dynamic_cast<Book*>(media)) {
+    if (Book* b = dynamic_cast<Book*>(media)) 
+    {
         b->setPages(pagesEditBook->value());
         b->setISBN(isbnEditBook->text());
         b->setPublisher(publisherEditBook->text());
         b->setAuthor(authorEditBook->text());
-    }
-    else if (Film* f = dynamic_cast<Film*>(media)) {
+    } 
+    else if (Film* f = dynamic_cast<Film*>(media)) 
+    {
         f->setDuration(durationEditMovie->value());
         f->setRating(ratingEditMovie->value());
         f->setStudio(studioEditMovie->text());
         f->setDirector(directorEditMovie->text());
-    }
-    else if (Music* mu = dynamic_cast<Music*>(media)) {
+    } 
+    else if (Music* mu = dynamic_cast<Music*>(media)) 
+    {
         mu->setFormat(formatEditMusic->text());
         mu->setLabel(labelEditMusic->text());
         mu->setDuration(durationEditMusic->value());
-    }
-    else if (Videogame* vg = dynamic_cast<Videogame*>(media)) {
+    } 
+    else if (Videogame* vg = dynamic_cast<Videogame*>(media)) 
+    {
         vg->setPlatform(platformEditVideogame->text());
         vg->setDeveloper(developerEditVideogame->text());
         vg->setPublisher(publisherEditVideogame->text());
         vg->setPlaytime(playtimeEditVideogame->value());
     }
 
-    qDebug() << "Media updated in UI:" << media->getTitle();
-
     emit mediaUpdated(media);
 }
 
-
-void EditItemView::setMedia(Media* m)
+void EditItemView::setMedia(Media* m) 
 {
     if(!m) return;
 
     media = m;
-
     currentImagePath = media->getImagePath();
 
     titleEdit->setText(media->getTitle());
@@ -131,21 +127,25 @@ void EditItemView::setMedia(Media* m)
     yearEdit->setValue(media->getYear());
     descriptionEdit->setPlainText(media->getDescription());
 
-    while (formLayout->rowCount() > 4) {
+    while (formLayout->rowCount() > 4) 
+    {
         QLayoutItem* itemLabel = formLayout->itemAt(4, QFormLayout::LabelRole);
         QLayoutItem* itemField = formLayout->itemAt(4, QFormLayout::FieldRole);
 
-        if (itemLabel) {
+        if (itemLabel) 
+        {
             delete itemLabel->widget();
         }
-        if (itemField) {
+        if (itemField) 
+        {
             delete itemField->widget();
         }
 
         formLayout->removeRow(4);
     }
 
-    if (Book* b = dynamic_cast<Book*>(media)) {
+    if (Book* b = dynamic_cast<Book*>(media)) 
+    {
         pagesEditBook = new QSpinBox(this);
         pagesEditBook->setRange(1, 10000);
         pagesEditBook->setValue(b->getPages());
@@ -158,8 +158,9 @@ void EditItemView::setMedia(Media* m)
         formLayout->addRow("ISBN:", isbnEditBook);
         formLayout->addRow("Publisher:", publisherEditBook);
         formLayout->addRow("Author:", authorEditBook);
-    }
-    else if (Film* f = dynamic_cast<Film*>(media)) {
+    } 
+    else if (Film* f = dynamic_cast<Film*>(media)) 
+    {
         durationEditMovie = new QSpinBox(this);
         durationEditMovie->setRange(1, 600);
         durationEditMovie->setValue(f->getDuration());
@@ -175,8 +176,9 @@ void EditItemView::setMedia(Media* m)
         formLayout->addRow("Rating:", ratingEditMovie);
         formLayout->addRow("Studio:", studioEditMovie);
         formLayout->addRow("Director:", directorEditMovie);
-    }
-    else if (Music* mu = dynamic_cast<Music*>(media)) {
+    } 
+    else if (Music* mu = dynamic_cast<Music*>(media)) 
+    {
         formatEditMusic = new QLineEdit(mu->getFormat(), this);
         labelEditMusic = new QLineEdit(mu->getLabel(), this);
 
@@ -187,8 +189,9 @@ void EditItemView::setMedia(Media* m)
         formLayout->addRow("Format:", formatEditMusic);
         formLayout->addRow("Label:", labelEditMusic);
         formLayout->addRow("Duration:", durationEditMusic);
-    }
-    else if (Videogame* vg = dynamic_cast<Videogame*>(media)) {
+    } 
+    else if (Videogame* vg = dynamic_cast<Videogame*>(media)) 
+    {
         platformEditVideogame = new QLineEdit(vg->getPlatform(), this);
         developerEditVideogame = new QLineEdit(vg->getDeveloper(), this);
         publisherEditVideogame = new QLineEdit(vg->getPublisher(), this);
@@ -201,8 +204,5 @@ void EditItemView::setMedia(Media* m)
         formLayout->addRow("Developer:", developerEditVideogame);
         formLayout->addRow("Publisher:", publisherEditVideogame);
         formLayout->addRow("Playtime (h):", playtimeEditVideogame);
-    }
-    else {
-        qDebug() << "Unknown media type in EditItemView";
     }
 }

@@ -18,8 +18,6 @@ public:
 signals:
     void addItemClicked();
     void searchItemClicked();
-    void addCollectionClicked();
-    void searchCollectionClicked();
 
 private slots:
     void onThemeToggled(bool checked);

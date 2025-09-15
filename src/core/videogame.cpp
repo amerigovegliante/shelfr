@@ -28,6 +28,8 @@ QString Videogame::getPlatform() const
     return Videogame::platform;
 }
 
+QString Videogame::getType() const { return "Videogame";}
+
 QString Videogame::getDeveloper() const
 {
     return Videogame::developer;

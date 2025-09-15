@@ -18,7 +18,6 @@ void ViewItemView::setupUI()
     mainLayout->setSpacing(20);
     mainLayout->setContentsMargins(30, 30, 30, 30);
 
-    // Header con titolo e pulsante back
     headerLayout = new QHBoxLayout();
     
     backButton = new QPushButton("← Back", this);
@@ -34,10 +33,8 @@ void ViewItemView::setupUI()
     headerLayout->addStretch();
     headerLayout->addWidget(new QLabel("")); 
 
-    // Content area
     contentLayout = new QHBoxLayout();
     
-    // Left side - Image
     QVBoxLayout* leftLayout = new QVBoxLayout();
     imageLabel = new QLabel(this);
     imageLabel->setAlignment(Qt::AlignCenter);
@@ -109,17 +106,14 @@ void ViewItemView::updateView()
     }
 
     titleLabel->setText(currentMedia->getTitle());
-    typeLabel->setText("Type: " + QString(typeid(*currentMedia).name()).replace("class ", ""));
+    typeLabel->setText("Type: " + currentMedia->getType());
     yearLabel->setText("Year: " + QString::number(currentMedia->getYear()));
     genreLabel->setText("Genre: " + currentMedia->getGenre());
     descriptionEdit->setText(currentMedia->getDescription());
 
-    // Immagine
     if (!currentMedia->getImagePath().isEmpty() && QFile::exists(currentMedia->getImagePath())) {
         QPixmap pixmap(currentMedia->getImagePath());
-        imageLabel->setPixmap(pixmap.scaled(300, 300, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    } else {
-        imageLabel->setPixmap(QPixmap(":/images/default_media.png").scaled(300, 300));
+        imageLabel->setPixmap(pixmap.scaled(imageLabel->width(), imageLabel->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
     }
 
     detailsEdit->setText(formatMediaDetails(currentMedia));
@@ -144,7 +138,7 @@ QString ViewItemView::formatMediaDetails(Media* media)
             .arg(film->getStudio());
     }
     else if (Music* music = dynamic_cast<Music*>(media)) {
-        details = QString("Artist: %1\nDuration: %2 minutes\nFormat: %3\nLabel: %4")
+        details = QString("Duration: %1 minutes\nFormat: %2\nLabel: %3")
             .arg(music->getDuration())
             .arg(music->getFormat())
             .arg(music->getLabel());

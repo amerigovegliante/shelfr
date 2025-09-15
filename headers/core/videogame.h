@@ -18,6 +18,8 @@ class Videogame: public Media
         virtual ~Videogame() override = default;
         Videogame* clone() const override;
 
+        virtual QString getType() const override;
+
         QString getPlatform() const;
         QString getDeveloper() const;
         QString getPublisher() const;

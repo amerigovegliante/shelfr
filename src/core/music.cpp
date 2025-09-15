@@ -14,6 +14,8 @@ Music::Music(const Music& music):
     duration(music.duration)
 {}
 
+QString Music::getType() const { return "Music";}
+
 void Music::accept(MediaVisitorInterface& visitor)
 {
     visitor.visit(*this);
