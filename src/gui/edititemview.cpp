@@ -41,8 +41,13 @@ void EditItemView::setupUI()
 
     mainLayout->addLayout(formLayout);
 
-    addButton = new QPushButton("Save Changes", this);
+    addButton = new QPushButton("Save...",this);
+    addButton->setIcon(QIcon(":/icons/save.png"));
+    addButton->setIconSize(QSize(24,24));
+    addButton->setObjectName("media-save-button");
+
     browseImageButton = new QPushButton("Browse Image", this);
+    browseImageButton->setObjectName("imagebrowser");
 
     QHBoxLayout* buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(addButton);

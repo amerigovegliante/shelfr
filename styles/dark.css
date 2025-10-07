@@ -109,3 +109,26 @@ QCheckBox::indicator:checked:hover {
     font-weight: bold;
     font-size: 18px;
 }
+
+#media-edit-button {
+    text-align: center;
+    align-content: center;
+    background-color: green;
+}
+#media-edit-button:hover {    
+    background-color: darkgreen;
+}
+
+#media-delete-button{
+    text-align: center;
+    align-content: center;
+    background-color: red;
+}
+#media-delete-button:hover {    
+    background-color: darkred;
+}
+
+#media-save-button {
+    text-align: center;
+    align-content: center;
+}

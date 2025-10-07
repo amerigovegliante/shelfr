@@ -117,10 +117,19 @@ void MediaCard::setupButtons()
     buttonLayout->setSpacing(5);
     buttonLayout->setContentsMargins(0, 10, 0, 0);
 
-    editButton = new QPushButton("Edit", this);
+    qDebug() << "=== Checking Resources ===";
+    qDebug() << "Edit icon exists:" << QFile::exists(":/icons/edit.png");
+    qDebug() << "Delete icon exists:" << QFile::exists(":/icons/delete.png");
+    qDebug() << "Save icon exists:" << QFile::exists(":/icons/save.png");
+
+    editButton = new QPushButton(this);
+    editButton->setIcon(QIcon(":/icons/edit.png"));
+    editButton->setIconSize(QSize(24,24));
     editButton->setObjectName("media-edit-button");
 
-    deleteButton = new QPushButton("Delete", this);
+    deleteButton = new QPushButton(this);
+    deleteButton->setIcon(QIcon(":/icons/delete.png"));
+    deleteButton->setIconSize(QSize(24,24));
     deleteButton->setObjectName("media-delete-button");
 
     connect(editButton, &QPushButton::clicked, this, [this]() {

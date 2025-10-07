@@ -43,7 +43,10 @@ void AddItemView::setupUI()
 
     browseImageButton = new QPushButton("Select Image...", this);
 
-    addButton = new QPushButton("Add Media", this);
+    addButton = new QPushButton("Save...",this);
+    addButton->setIcon(QIcon(":/icons/save.png"));
+    addButton->setIconSize(QSize(24,24));
+    addButton->setObjectName("media-save-button");
 
     browseImageButton->setObjectName("imagebrowser");
 
