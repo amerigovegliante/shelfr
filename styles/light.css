@@ -19,6 +19,7 @@ QFrame#workspace {
     background-color: #F5F5F5; /* bianco sporco, più morbido */
 }
 
+
 QLabel#title {
     color: #333333; /* testo scuro ma non nero pieno */
     font-size: 24px;

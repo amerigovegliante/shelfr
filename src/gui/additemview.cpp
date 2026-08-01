@@ -60,6 +60,7 @@ void AddItemView::setupUI()
     publisherEditBook->setPlaceholderText("Publisher...");
     authorEditBook = new QLineEdit(this);
     authorEditBook->setPlaceholderText("Author...");
+    
 
     durationEditMovie = new QSpinBox(this);
     durationEditMovie->setMinimum(0);
